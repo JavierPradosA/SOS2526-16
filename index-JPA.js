@@ -11,7 +11,7 @@ const data = [
   { country: "germany", year: 2023, charging_point: 129456, ac_slow: 3017, dc_fast: 6467, total_power_kw: 4569267 }
 ];
 
-let germany = data.filter(d => d.country==="germany" );
+let germany = data.filter(d => d.country==="germany");
 
 let media_german_CP= germany.reduce((acc, d) => acc + d.charging_point, 0) / germany.length;
 
