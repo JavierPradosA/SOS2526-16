@@ -1,0 +1,24 @@
+{
+  "name": "sos2526-16",
+  "version": "0.0.0",
+  "description": "",
+  "homepage": "https://github.com/gti-sos/SOS2526-16#readme",
+  "bugs": {
+    "url": "https://github.com/gti-sos/SOS2526-16/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gti-sos/SOS2526-16.git"
+  },
+  "license": "ISC",
+  "author": "Javier P",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cool-ascii-faces": "^1.3.4",
+    "express": "^5.2.1"
+  }
+}
