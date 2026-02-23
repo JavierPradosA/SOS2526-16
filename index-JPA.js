@@ -11,8 +11,13 @@ const data = [
   { country: "germany", year: 2023, charging_point: 129456, ac_slow: 3017, dc_fast: 6467, total_power_kw: 4569267 }
 ];
 
+//Filtrado de datos por el país
 let germany = data.filter(d => d.country==="germany");
 
+/*Se usa reduce para que al acumulador inicado a 0 se 
+le vayan sumando los puntos de carga de los datos filtrados
+y luego se divide entre el total de datos filtrados*/
 let media_german_CP= germany.reduce((acc, d) => acc + d.charging_point, 0) / germany.length;
 
+//Mostramos la media por pantalla
 console.log(`The average charging point in Germany is ${media_german_CP}`);
