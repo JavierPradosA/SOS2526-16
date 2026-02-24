@@ -107,7 +107,7 @@ app.get("/samples/IMM", (req, res) =>{
 // 2. Definir la región objetivo
 const regionObjetivo = 'Finland';
 
-const mediaImpacto = null;
+let mediaImpacto = null;
 
 // 3. Algoritmo usando iteradores (filter, map, reduce)
 // Primero, filtramos las filas correspondientes a la región objetivo
@@ -121,7 +121,7 @@ if (datosFiltrados.length > 0) {
     const sumaTotal = impactos.reduce((acumulador, valorActual) => acumulador + valorActual, 0);
 
     // Calculamos la media aritmética
-    const mediaImpacto = sumaTotal / impactos.length;
+    mediaImpacto = sumaTotal / impactos.length;
 }
 
 res.send(`La media de impacto económico de ${regionObjetivo} es ${mediaImpacto}`)
