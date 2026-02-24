@@ -105,7 +105,7 @@ const datos = [
 
 let dataII = [];
 
-app.get("/api/v1/global-ev-sales/loadDatos", (req, res) => {
+app.get("/api/v1/global-ev-sales/loadInitialData", (req, res) => {
   if(dataII.length === 0){
     dataII = datos.slice();
     res.status(201).send("Los datos han sido cargados")
