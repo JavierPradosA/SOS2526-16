@@ -16,49 +16,49 @@ app.get("/about", (req, res) => {
 
 //TAREA F04
 const initialData = [
-    { region_country: "Brazil", year: 2024, ev_stock: 214003, macroregion_stock: 1884600, worldwide_stock: 50000000, "oil_world_displacement": 58001 },
-    { region_country: "Brazil", year: 2010, ev_stock: 0, macroregion_stock: 400, worldwide_stock: 20426, "oil_world_displacement": 25 },
-    { region_country: "Canada", year: 2011, ev_stock: 555, macroregion_stock: 23800, worldwide_stock: 67526, "oil_world_displacement": 88 },
-    { region_country: "Mexico", year: 2012, ev_stock: 91, macroregion_stock: 4671, worldwide_stock: 190026, "oil_world_displacement": 190 },
-    { region_country: "China", year: 2013, ev_stock: 32600, macroregion_stock: 111000, worldwide_stock: 390027, "oil_world_displacement": 420 },
-    { region_country: "China", year: 2014, ev_stock: 85000, macroregion_stock: 208000, worldwide_stock: 710087, "oil_world_displacement": 830 },
-    { region_country: "Colombia", year: 2015, ev_stock: 124, macroregion_stock: 18620, worldwide_stock: 1250810, "oil_world_displacement": 1500 },
-    { region_country: "Costa Rica", year: 2016, ev_stock: 12, macroregion_stock: 37990, worldwide_stock: 2003100, "oil_world_displacement": 2100 },
-    { region_country: "Denmark", year: 2017, ev_stock: 10683, macroregion_stock: 570000, worldwide_stock: 3106800, "oil_world_displacement": 3500 },
-    { region_country: "Finland", year: 2018, ev_stock: 15400, macroregion_stock: 820000, worldwide_stock: 5111000, "oil_world_displacement": 6000 },
-    { region_country: "Finland", year: 2019, ev_stock: 29701, macroregion_stock: 1330000, worldwide_stock: 7219000, "oil_world_displacement": 8100 }
-  ];
+  { region_country: "Brazil", year: 2024, ev_stock: 214003, macroregion_stock: 1884600, worldwide_stock: 50000000, "oil_world_displacement": 58001 },
+  { region_country: "Brazil", year: 2010, ev_stock: 0, macroregion_stock: 400, worldwide_stock: 20426, "oil_world_displacement": 25 },
+  { region_country: "Canada", year: 2011, ev_stock: 555, macroregion_stock: 23800, worldwide_stock: 67526, "oil_world_displacement": 88 },
+  { region_country: "Mexico", year: 2012, ev_stock: 91, macroregion_stock: 4671, worldwide_stock: 190026, "oil_world_displacement": 190 },
+  { region_country: "China", year: 2013, ev_stock: 32600, macroregion_stock: 111000, worldwide_stock: 390027, "oil_world_displacement": 420 },
+  { region_country: "China", year: 2014, ev_stock: 85000, macroregion_stock: 208000, worldwide_stock: 710087, "oil_world_displacement": 830 },
+  { region_country: "Colombia", year: 2015, ev_stock: 124, macroregion_stock: 18620, worldwide_stock: 1250810, "oil_world_displacement": 1500 },
+  { region_country: "Costa Rica", year: 2016, ev_stock: 12, macroregion_stock: 37990, worldwide_stock: 2003100, "oil_world_displacement": 2100 },
+  { region_country: "Denmark", year: 2017, ev_stock: 10683, macroregion_stock: 570000, worldwide_stock: 3106800, "oil_world_displacement": 3500 },
+  { region_country: "Finland", year: 2018, ev_stock: 15400, macroregion_stock: 820000, worldwide_stock: 5111000, "oil_world_displacement": 6000 },
+  { region_country: "Finland", year: 2019, ev_stock: 29701, macroregion_stock: 1330000, worldwide_stock: 7219000, "oil_world_displacement": 8100 }
+];
 
 let data = [];
 
 app.get("/api/v1/global-ev-stock-volumes/loadInitialData", (req, res) => {
-  if(data.length === 0){
+  if (data.length === 0) {
     data = initialData.slice();
     res.status(201).send("Los datos han sido cargados")
 
-  }else{
+  } else {
     res.status(409).send("Ya hay datos cargados")
   }
 }
 );
 
-app.get("/samples/ARH", (req, res) =>{
+app.get("/samples/ARH", (req, res) => {
   //Lógica de index-ARH.js
-  
+
   let targetCountry = "Finland";
   let targetColumn = "oil_world_displacement";
 
 
   let totalPerCountry = data.reduce((acum, fila) => {
-    if (fila.region_country === targetCountry){
-        acum.sum += fila[targetColumn];
-        acum.count++;
+    if (fila.region_country === targetCountry) {
+      acum.sum += fila[targetColumn];
+      acum.count++;
     }
     return acum;
-  }, {sum: 0 , count: 0}
+  }, { sum: 0, count: 0 }
   );
 
-  let countryAverage = totalPerCountry.sum/totalPerCountry.count;
+  let countryAverage = totalPerCountry.sum / totalPerCountry.count;
 
   res.send(`La media anual de barriles de crudo ahorrados por ${targetCountry} es de ${countryAverage}`)
 });
@@ -69,11 +69,11 @@ app.get("/api/v1/global-ev-stock-volumes", (req, res) => {
 );
 //GET dato
 app.get("/api/v1/global-ev-stock-volumes", (req, res) => {
-  
-  if(resource) {
+
+  if (resource) {
     res.json(data);
   }
-  else{
+  else {
     res.status(404).send("Recurso no encontrado")
   }
 }
@@ -91,42 +91,42 @@ app.get("/api/v1/global-ev-stock-volumes", (req, res) => {
 
 // 1. Inicializar el array con los datos extraídos de la imagen
 const datos = [
-    { region: 'Australia', category: 'Historical', parameter: 'EV stock share', mode: 'Cars', powertrain: 'EV', year: 2011, unit: 'Percent', value: 0.000039253245, economic_impact: 0 },
-    { region: 'Finland', category: 'Historical', parameter: 'EV stock share', mode: 'Vans', powertrain: 'EV', year: 2021, unit: 'Percent', value: 0.3, economic_impact: 0 },
-    { region: 'Finland', category: 'Historical', parameter: 'EV stock share', mode: 'Buses', powertrain: 'BEV', year: 2022, unit: 'Vehicles', value: 550, economic_impact: 154.9 },
-    { region: 'USA', category: 'Projection-STEPS', parameter: 'EV charging points', mode: 'EV', powertrain: 'Publicly available fast', year: 2021, unit: 'Charging Points', value: 22000, economic_impact: 358.64 },
-    { region: 'Netherlands', category: 'Historical', parameter: 'EV stock', mode: 'Trucks', powertrain: 'PHEV', year: 2020, unit: 'Vehicles', value: 41, economic_impact: 6.71 },
-    { region: 'Finland', category: 'Historical', parameter: 'EV stock share', mode: 'Trucks', powertrain: 'EV', year: 2023, unit: 'Percent', value: 0.119, economic_impact: 0 },
-    { region: 'Seychelles', category: 'Historical', parameter: 'EV sales', mode: 'Cars', powertrain: 'BEV', year: 2020, unit: 'Vehicles', value: 26, economic_impact: 1.07 },
-    { region: 'Germany', category: 'Historical', parameter: 'EV stock', mode: 'Vans', powertrain: 'BEV', year: 2021, unit: 'Vehicles', value: 41000, economic_impact: 2340.04 },
-    { region: 'Finland', category: 'Historical', parameter: 'EV sales', mode: 'Cars', powertrain: 'PHEV', year: 2013, unit: 'Vehicles', value: 170, economic_impact: 6.1 },
-    { region: 'Finland', category: 'Historical', parameter: 'EV sales', mode: 'Buses', powertrain: 'BEV', year: 2016, unit: 'Vehicles', value: 13, economic_impact: 3.66 }
+  { region: 'Australia', category: 'Historical', parameter: 'EV stock share', mode: 'Cars', powertrain: 'EV', year: 2011, unit: 'Percent', value: 0.000039253245, economic_impact: 0 },
+  { region: 'Finland', category: 'Historical', parameter: 'EV stock share', mode: 'Vans', powertrain: 'EV', year: 2021, unit: 'Percent', value: 0.3, economic_impact: 0 },
+  { region: 'Finland', category: 'Historical', parameter: 'EV stock share', mode: 'Buses', powertrain: 'BEV', year: 2022, unit: 'Vehicles', value: 550, economic_impact: 154.9 },
+  { region: 'USA', category: 'Projection-STEPS', parameter: 'EV charging points', mode: 'EV', powertrain: 'Publicly available fast', year: 2021, unit: 'Charging Points', value: 22000, economic_impact: 358.64 },
+  { region: 'Netherlands', category: 'Historical', parameter: 'EV stock', mode: 'Trucks', powertrain: 'PHEV', year: 2020, unit: 'Vehicles', value: 41, economic_impact: 6.71 },
+  { region: 'Finland', category: 'Historical', parameter: 'EV stock share', mode: 'Trucks', powertrain: 'EV', year: 2023, unit: 'Percent', value: 0.119, economic_impact: 0 },
+  { region: 'Seychelles', category: 'Historical', parameter: 'EV sales', mode: 'Cars', powertrain: 'BEV', year: 2020, unit: 'Vehicles', value: 26, economic_impact: 1.07 },
+  { region: 'Germany', category: 'Historical', parameter: 'EV stock', mode: 'Vans', powertrain: 'BEV', year: 2021, unit: 'Vehicles', value: 41000, economic_impact: 2340.04 },
+  { region: 'Finland', category: 'Historical', parameter: 'EV sales', mode: 'Cars', powertrain: 'PHEV', year: 2013, unit: 'Vehicles', value: 170, economic_impact: 6.1 },
+  { region: 'Finland', category: 'Historical', parameter: 'EV sales', mode: 'Buses', powertrain: 'BEV', year: 2016, unit: 'Vehicles', value: 13, economic_impact: 3.66 }
 ];
 
 let dataII = [];
 
 app.get("/api/v1/global-ev-sales/loadInitialData", (req, res) => {
-  if(dataII.length === 0){
+  if (dataII.length === 0) {
     dataII = datos.slice();
     res.status(201).send("Los datos han sido cargados")
 
-  }else{
+  } else {
     res.status(409).send("Ya hay datos cargados")
   }
 }
 );
 
-app.get("/samples/IMM", (req, res) =>{
-// 2. Definir la región objetivo
-const regionObjetivo = 'Finland';
+app.get("/samples/IMM", (req, res) => {
+  // 2. Definir la región objetivo
+  const regionObjetivo = 'Finland';
 
-let mediaImpacto = null;
+  let mediaImpacto = null;
 
-// 3. Algoritmo usando iteradores (filter, map, reduce)
-// Primero, filtramos las filas correspondientes a la región objetivo
-const datosFiltrados = datos.filter(fila => fila.region === regionObjetivo);
+  // 3. Algoritmo usando iteradores (filter, map, reduce)
+  // Primero, filtramos las filas correspondientes a la región objetivo
+  const datosFiltrados = datos.filter(fila => fila.region === regionObjetivo);
 
-if (datosFiltrados.length > 0) {
+  if (datosFiltrados.length > 0) {
     // Usamos map para aislar los valores de 'economic_impact' en un nuevo array
     const impactos = datosFiltrados.map(fila => fila.economic_impact);
 
@@ -135,9 +135,9 @@ if (datosFiltrados.length > 0) {
 
     // Calculamos la media aritmética
     mediaImpacto = sumaTotal / impactos.length;
-}
+  }
 
-res.send(`La media de impacto económico de ${regionObjetivo} es ${mediaImpacto}`)
+  res.send(`La media de impacto económico de ${regionObjetivo} es ${mediaImpacto}`)
 })
 
 //GET lista datos IMM
@@ -147,16 +147,72 @@ app.get("/api/v1/global-ev-sales", (req, res) => {
 );
 //GET dato IMM
 app.get("/api/v1/global-ev-sales", (req, res) => {
-  
-  if(resource) {
+
+  if (resource) {
     res.json(dataII);
   }
-  else{
+  else {
     res.status(404).send("Recurso no encontrado")
   }
 }
 );
 
+//index-JPA.js
+const dataJavi = [
+  { country: "germany", year: 2021, charging_point: 63898, ac_slow: 1809, dc_fast: 3451, total_power_kw: 1812933 },
+  { country: "canada", year: 2023, charging_point: 26108, ac_slow: 15581, dc_fast: 2076, total_power_kw: 415585 },
+  { country: "germany", year: 2019, charging_point: 31195, ac_slow: 416, dc_fast: 1975, total_power_kw: 836856 },
+  { country: "germany", year: 2020, charging_point: 45073, ac_slow: 1047, dc_fast: 2814, total_power_kw: 1244489 },
+  { country: "germany", year: 2022, charging_point: 90783, ac_slow: 2167, dc_fast: 4297, total_power_kw: 2748477 },
+  { country: "malta", year: 2023, charging_point: 394, ac_slow: 0, dc_fast: 47, total_power_kw: 10164 },
+  { country: "switzerland", year: 2023, charging_point: 13324, ac_slow: 1913, dc_fast: 887, total_power_kw: 470255 },
+  { country: "türkiye", year: 2023, charging_point: 12084, ac_slow: 311, dc_fast: 2117, total_power_kw: 646699 },
+  { country: "monaco", year: 2019, charging_point: 18, ac_slow: 3, dc_fast: 6, total_power_kw: 343 },
+  { country: "germany", year: 2023, charging_point: 129456, ac_slow: 3017, dc_fast: 6467, total_power_kw: 4569267 }
+];
+let dataIII = [];
+
+app.get("/api/v1/global-ev-charging-infrastructures/loadInitialData", (req, res) => {
+  if (dataIII.length === 0) {
+    dataIII = dataJavi.slice();
+    res.status(201).send("Los datos han sido cargados");
+
+  } else {
+    res.status(409).send("Ya hay datos cargados");
+  }
+}
+);
+
+
+app.get("/samples/JPA", (req, res) => {
+  //Filtrado de datos por el país
+  let germany = dataIII.filter(d => d.country === "germany");
+
+  /*Se usa reduce para que al acumulador inicado a 0 se 
+  le vayan sumando los puntos de carga de los datos filtrados
+  y luego se divide entre el total de datos filtrados*/
+  let media_german_CP = germany.reduce((acc, d) => acc + d.charging_point, 0) / germany.length;
+
+  //Mostramos la media por pantalla
+  res.send(`The average charging point in Germany is ${media_german_CP}`);
+})
+
+//GET lista datos 
+app.get("/api/v1/global-ev-charging-infrastructures", (req, res) => {
+  res.json(dataIII);
+}
+);
+//GET dato JPA
+app.get("/api/v1/global-ev-charging-infrastructures", (req, res) => {
+
+  if (resource) {
+    res.json(dataIII);
+  }
+  else {
+    res.status(404).send("Recurso no encontrado")
+  }
+}
+);
 
 const PORT = process.env.PORT || 3000;
 
