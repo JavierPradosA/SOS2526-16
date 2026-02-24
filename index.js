@@ -103,6 +103,19 @@ const datos = [
     { region: 'Finland', category: 'Historical', parameter: 'EV sales', mode: 'Buses', powertrain: 'BEV', year: 2016, unit: 'Vehicles', value: 13, economic_impact: 3.66 }
 ];
 
+let dataII = [];
+
+app.get("/api/v1/global-ev-sales/loadDatos", (req, res) => {
+  if(dataII.length === 0){
+    dataII = datos.slice();
+    res.status(201).send("Los datos han sido cargados")
+
+  }else{
+    res.status(409).send("Ya hay datos cargados")
+  }
+}
+);
+
 app.get("/samples/IMM", (req, res) =>{
 // 2. Definir la región objetivo
 const regionObjetivo = 'Finland';
@@ -126,6 +139,23 @@ if (datosFiltrados.length > 0) {
 
 res.send(`La media de impacto económico de ${regionObjetivo} es ${mediaImpacto}`)
 })
+
+//GET lista datos IMM
+app.get("/api/v1/global-ev-sales", (req, res) => {
+  res.json(dataII);
+}
+);
+//GET dato IMM
+app.get("/api/v1/global-ev-sales", (req, res) => {
+  
+  if(resource) {
+    res.json(dataII);
+  }
+  else{
+    res.status(404).send("Recurso no encontrado")
+  }
+}
+);
 
 
 const PORT = process.env.PORT || 3000;
