@@ -187,7 +187,7 @@ app.get("/api/v1/global-ev-charging-infrastructures/loadInitialData", (req, res)
 
 app.get("/samples/JPA", (req, res) => {
   if (dataIII.length === 0) {
-     return res.send(`Aun no hay datos cargados`)
+    return res.send(`Aun no hay datos cargados`)
   }
   //Filtrado de datos por el país
   let germany = dataIII.filter(d => d.country === "germany");
@@ -255,7 +255,7 @@ app.get("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) 
 //POST
 app.post("/api/v1/global-ev-charging-infrastructures", (req, res) => {
   const newItem = req.body;
-  if (!newItem.country || !newItem.year){
+  if (!newItem.country || !newItem.year) {
     return res.sendStatus(400)
   }
   if (newItem.country) {
