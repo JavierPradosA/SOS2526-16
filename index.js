@@ -5,6 +5,7 @@ let path = require("path");
 let app = express();
 
 app.use(express.static("public"));
+app.use(express.json());
 
 app.get("/cool", (req, res) => {
   res.send(cool());
@@ -185,6 +186,9 @@ app.get("/api/v1/global-ev-charging-infrastructures/loadInitialData", (req, res)
 
 
 app.get("/samples/JPA", (req, res) => {
+  if (dataIII.length === 0) {
+     return res.send(`Aun no hay datos cargados`)
+  }
   //Filtrado de datos por el país
   let germany = dataIII.filter(d => d.country === "germany");
 
@@ -197,32 +201,32 @@ app.get("/samples/JPA", (req, res) => {
   res.send(`The average charging point in Germany is ${media_german_CP}`);
 })
 
-//Posibilidades del GET completas
+//Get colección
 app.get("/api/v1/global-ev-charging-infrastructures", (req, res) => {
-  let result = dataIII; //todos los datos inicialmente, sino hay nada es [ ]
+  let result = dataIII;
 
-  //filtro por country, modifica result
+  // filtro por country
   if (req.query.country) {
     result = result.filter(d =>
-      d.country === req.query.country.toLowerCase() //Por si en la query se pone el pais en mayuscula
+      d.country === req.query.country.toLowerCase()
     );
   }
 
-  //filtro por year exacto, sobre el result filtrado de country
+  // filtro por year exacto
   if (req.query.year) {
     result = result.filter(d =>
       d.year == Number(req.query.year)
     );
   }
 
-  //filtro por rango desde
+  // filtro desde
   if (req.query.from) {
     result = result.filter(d =>
       d.year >= Number(req.query.from)
     );
   }
 
-  //filtro por rango hasta
+  // filtro hasta
   if (req.query.to) {
     result = result.filter(d =>
       d.year <= Number(req.query.to)
@@ -230,6 +234,88 @@ app.get("/api/v1/global-ev-charging-infrastructures", (req, res) => {
   }
 
   res.json(result); // siempre array
+});
+
+//Get individual
+app.get("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
+  const { country, year } = req.params;
+
+  const item = dataIII.find(d =>
+    d.country === country.toLowerCase() &&
+    d.year == Number(year)
+  );
+
+  if (!item) {
+    return res.sendStatus(404);
+  }
+
+  res.json(item);
+});
+
+//POST
+app.post("/api/v1/global-ev-charging-infrastructures", (req, res) => {
+  const newItem = req.body;
+  if (!newItem.country || !newItem.year){
+    return res.sendStatus(400)
+  }
+  if (newItem.country) {
+    newItem.country = newItem.country.toLowerCase();
+  }
+
+  // comprobar si ya existe (misma clave)
+  const exists = dataIII.find(
+    d => d.country === newItem.country &&
+      d.year == newItem.year
+  );
+
+  if (exists) {
+    return res.sendStatus(409); // ya existe
+  }
+
+  dataIII.push(newItem);
+  res.sendStatus(201); // creado
+});
+
+//PUT
+app.put("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
+  const { country, year } = req.params;
+  if (req.body.country) {
+    req.body.country = req.body.country.toLowerCase();
+  }
+
+  const index = dataIII.findIndex(
+    d => d.country === country.toLowerCase() &&
+      d.year == Number(year)
+  );
+
+  if (index === -1) {
+    return res.sendStatus(404); // no existe
+  }
+
+  dataIII[index] = req.body; // reemplazo completo
+  res.sendStatus(200);
+});
+
+//Delete coleccion
+app.delete("/api/v1/global-ev-charging-infrastructures", (req, res) => {
+  dataIII = [];
+  res.sendStatus(200);
+});
+
+//Delete individual
+app.delete("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
+  const before = dataIII.length;
+
+  dataIII = dataIII.filter(d =>
+    !(d.country === req.params.country.toLowerCase() &&
+      d.year == Number(req.params.year))
+  );
+
+  if (dataIII.length === before) {
+    return res.sendStatus(404); // no existía
+  }
+
+  res.sendStatus(200); // borrado correcto
 });
 
 const PORT = process.env.PORT || 3000;
