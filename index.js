@@ -197,22 +197,40 @@ app.get("/samples/JPA", (req, res) => {
   res.send(`The average charging point in Germany is ${media_german_CP}`);
 })
 
-//GET lista datos 
+//Posibilidades del GET completas
 app.get("/api/v1/global-ev-charging-infrastructures", (req, res) => {
-  res.json(dataIII);
-}
-);
-//GET dato JPA
-app.get("/api/v1/global-ev-charging-infrastructures", (req, res) => {
+  let result = dataIII; //todos los datos inicialmente, sino hay nada es [ ]
 
-  if (resource) {
-    res.json(dataIII);
+  //filtro por country, modifica result
+  if (req.query.country) {
+    result = result.filter(d =>
+      d.country === req.query.country.toLowerCase() //Por si en la query se pone el pais en mayuscula
+    );
   }
-  else {
-    res.status(404).send("Recurso no encontrado")
+
+  //filtro por year exacto, sobre el result filtrado de country
+  if (req.query.year) {
+    result = result.filter(d =>
+      d.year == Number(req.query.year)
+    );
   }
-}
-);
+
+  //filtro por rango desde
+  if (req.query.from) {
+    result = result.filter(d =>
+      d.year >= Number(req.query.from)
+    );
+  }
+
+  //filtro por rango hasta
+  if (req.query.to) {
+    result = result.filter(d =>
+      d.year <= Number(req.query.to)
+    );
+  }
+
+  res.json(result); // siempre array
+});
 
 const PORT = process.env.PORT || 3000;
 
