@@ -75,24 +75,107 @@ app.get("/api/v1/global-ev-stock-volumes", (req, res) => {
 }
 );
 //GET dato
-app.get("/api/v1/global-ev-stock-volumes", (req, res) => {
+app.get("/api/v1/global-ev-stock-volumes/:region_country/:year", (req, res) => {
+  const { region_country, year } = req.params;
+//.find recorre el array y se para en el primer elemento que cumpla la condición
+  const registro = data.find(d =>
+    d.region_country.toLowerCase() === region_country.toLowerCase() &&
+    Number(d.year) == Number(year)
+  );
+//Si la búsqueda no devuelve nada, es que no existe nigún registro con dichos parámetros en el array
+  if (!registro) {
+    return res.sendStatus(404);
+  }
 
-  if (resource) {
-    res.json(data);
-  }
-  else {
-    res.status(404).send("Recurso no encontrado")
-  }
+  res.json(registro);
+ 
 }
 );
 
 //POST Dato; No debe permitir realizar post sobre otro dato
+app.post(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
+    const newRegister = req.body;
+  //Comprobamos si tiene los atributos mínimos
+  if (!newRegister.region_country || !newRegister.year) {
+    return res.sendStatus(400)
+  }
+  
+  //Comprobamos si existe ya
+  const exists = data.find(
+    d => d.region_country.toLowerCase() === newRegister.region_countrycountry.toLowerCase() &&
+    Number(d.year) == Number(newRegister.year)
+  );
+
+  //Si existe 409 CONFLICT
+  if (exists) {
+    return res.sendStatus(409);
+  }
+
+  data.push(newRegister);
+  //Creo que no es necesario mandar 201, ya que lo detecta automáticamente
+  res.sendStatus(201);
+
+});
+
+
 
 //PUT dato; No debe permitir realizar put a la lista general
+app.put(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
+  const { region_country, year } = req.params;
+    const updateData = req.body;
+  //Comprobamos que el identificador a actualizar corresponde con algún registro
+    if (region_country !== updateData.region_country || Number(year) !== Number(updateData.year)) {
+        return res.sendStatus(400);
+    }
+
+    //Buscar el índice del registro en el array
+    const index = data.findIndex(d => 
+        d.region_country.toLowerCase() === region_country.toLowerCase() && 
+        Number(d.year) === Number(year)
+    );
+
+    //Recorre el array y si no encuentra ningún índice que corresponde con el país y año, devuelve -1
+    if (index === -1) {
+        return res.sendStatus(404);
+    }
+
+    //
+    data[index] = updateData;
+    res.sendStatus(200); 
+
+}
+);
+
 
 //DELETE lista datos
+app.delete(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
+  data = [];
+  res.sendStatus(200);
+});
 
 //DELETE dato
+app.delete(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
+  const { region_country, year } = req.params;
+
+    //Comprobamos si existe el recurso
+    const existe = data.find(d => 
+        d.region_country.toLowerCase() === region_country.toLowerCase() && 
+        Number(d.year) === Number(year)
+    );
+    //Si no existe 404 NOT FOUND
+    if (!existe) {
+        return res.sendStatus(404);
+    }
+
+    //Filtramos el array, quedandonos con todo excepto el registro a borrar
+    data = data.filter(d => 
+        !(d.region_country.toLowerCase() === region_country.toLowerCase() && 
+          Number(d.year) === Number(year))
+    );
+
+    res.sendStatus(200);
+});
+
 
 // index-IMM.js
 
