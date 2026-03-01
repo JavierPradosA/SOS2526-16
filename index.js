@@ -1,11 +1,13 @@
 let express = require("express");
 let cool = require("cool-ascii-faces");
 let path = require("path");
+let bodyParser = require("body-parser");
 
 let app = express();
 
 app.use(express.static("public"));
 app.use(express.json());
+app.use(bodyParser.json());
 
 app.get("/cool", (req, res) => {
   res.send(cool());
@@ -14,6 +16,9 @@ app.get("/cool", (req, res) => {
 app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "about.html"));
 });
+
+//Buena Práctica: URL Base
+let BASE_URL_API = "/api/v1"; 
 
 //TAREA F04
 const initialData = [
@@ -32,13 +37,13 @@ const initialData = [
 
 let data = [];
 
-app.get("/api/v1/global-ev-stock-volumes/loadInitialData", (req, res) => {
+app.get(BASE_URL_API + "/global-ev-stock-volumes/loadInitialData", (req, res) => {
   if (data.length === 0) {
     data = initialData.slice();
-    res.status(201).send("Los datos han sido cargados")
+    res.status(201).json(data); //.json()===.send() pero con cabeceras json. Creo que no es necesario mandar el 201, lo reconoce automáticamente
 
   } else {
-    res.status(409).send("Ya hay datos cargados")
+    res.sendStatus(409);
   }
 }
 );
@@ -49,8 +54,7 @@ app.get("/samples/ARH", (req, res) => {
   let targetCountry = "Finland";
   let targetColumn = "oil_world_displacement";
 
-
-  let totalPerCountry = data.reduce((acum, fila) => {
+  let totalPerCountry = initialData.reduce((acum, fila) => {
     if (fila.region_country === targetCountry) {
       acum.sum += fila[targetColumn];
       acum.count++;
@@ -63,6 +67,8 @@ app.get("/samples/ARH", (req, res) => {
 
   res.send(`La media anual de barriles de crudo ahorrados por ${targetCountry} es de ${countryAverage}`)
 });
+
+
 //GET lista datos 
 app.get("/api/v1/global-ev-stock-volumes", (req, res) => {
   res.json(data);
