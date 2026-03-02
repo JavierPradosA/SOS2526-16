@@ -296,7 +296,7 @@ app.get("/api/v1/global-ev-sales/:region/:year", (req, res) => {
 
   const item = dataII.find(d =>
     d.region.toLowerCase() === region.toLowerCase() &&
-    Number(d.year) === Number(year)
+    Number(d.year) == Number(year)
   );
 
   if (!item) {
