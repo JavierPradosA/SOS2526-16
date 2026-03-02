@@ -244,7 +244,7 @@ app.get("/api/v1/global-ev-sales", (req, res) => {
   else {
     res.status(404).send("Recurso no encontrado")
   }
-}
+
 //Filtrado de datos por el país
   let finland = dataII.filter(d => d.region === "Finland");
 
