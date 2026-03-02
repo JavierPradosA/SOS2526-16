@@ -179,7 +179,7 @@ app.delete(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req
 
 // index-IMM.js
 
-// 1. Inicializar el array con los datos extraídos de la imagen
+// 1. Inicializar el array
 const datos = [
   { region: 'Australia', category: 'Historical', parameter: 'EV stock share', mode: 'Cars', powertrain: 'EV', year: 2011, unit: 'Percent', value: 0.000039253245, economic_impact: 0 },
   { region: 'Finland', category: 'Historical', parameter: 'EV stock share', mode: 'Vans', powertrain: 'EV', year: 2021, unit: 'Percent', value: 0.3, economic_impact: 0 },
@@ -245,7 +245,132 @@ app.get("/api/v1/global-ev-sales", (req, res) => {
     res.status(404).send("Recurso no encontrado")
   }
 }
-);
+//Filtrado de datos por el país
+  let finland = dataII.filter(d => d.region === "Finland");
+
+  
+  let media_finland_value = finland.reduce((acc, d) => acc + d.value, 0) / finland.length;
+
+  //Mostramos la media por pantalla
+  res.send(`The average charging point in Finland is ${media_finland_value}`);
+})
+
+//Get colección
+app.get("/api/v1/global-ev-sales", (req, res) => {
+  let resulta = dataII;
+
+  // filtro por region
+  if (req.query.region) {
+    resulta = resulta.filter(d =>
+      d.country === req.query.region.toLowerCase()
+    );
+  }
+
+  // filtro por year exacto
+  if (req.query.year) {
+    result = result.filter(d =>
+      d.year == Number(req.query.year)
+    );
+  }
+
+  // filtro desde
+  if (req.query.from) {
+    resulta = resulta.filter(d =>
+      d.year >= Number(req.query.from)
+    );
+  }
+
+  // filtro hasta
+  if (req.query.to) {
+    resulta = resulta.filter(d =>
+      d.year <= Number(req.query.to)
+    );
+  }
+
+  res.json(resulta); // siempre array
+});
+
+//Get individual
+app.get("/api/v1/global-ev-sales/:region/:year", (req, res) => {
+  const { region, year } = req.params;
+
+  const item = dataII.find(d =>
+    d.region === region.toLowerCase() &&
+    d.year == Number(year)
+  );
+
+  if (!item) {
+    return res.sendStatus(404);
+  }
+
+  res.json(item);
+});
+
+//POST
+app.post("/api/v1/global-ev-sales", (req, res) => {
+  const newItem = req.body;
+  if (!newItem.region || !newItem.year) {
+    return res.sendStatus(400)
+  }
+  if (newItem.region) {
+    newItem.region = newItem.region.toLowerCase();
+  }
+
+  // comprobar si ya existe (misma clave)
+  const exists = dataII.find(
+    d => d.region === newItem.region &&
+      d.year == newItem.year
+  );
+
+  if (exists) {
+    return res.sendStatus(409); // ya existe
+  }
+
+  dataII.push(newItem);
+  res.sendStatus(201); // creado
+});
+
+//PUT
+app.put("/api/v1/global-ev-sales/:region/:year", (req, res) => {
+  const { region, year } = req.params;
+  if (req.body.region) {
+    req.body.region = req.body.region.toLowerCase();
+  }
+
+  const index = dataII.findIndex(
+    d => d.region === region.toLowerCase() &&
+      d.year == Number(year)
+  );
+
+  if (index === -1) {
+    return res.sendStatus(404); // no existe
+  }
+
+  dataII[index] = req.body; // reemplazo completo
+  res.sendStatus(200);
+});
+
+//Delete coleccion
+app.delete("/api/v1/global-ev-sales", (req, res) => {
+  dataII = [];
+  res.sendStatus(200);
+});
+
+//Delete individual
+app.delete("/api/v1/global-ev-sales/:region/:year", (req, res) => {
+  const antes = dataII.length;
+
+  dataII = dataII.filter(d =>
+    !(d.region === req.params.region.toLowerCase() &&
+      d.year == Number(req.params.year))
+  );
+
+  if (dataII.length === antes) {
+    return res.sendStatus(404); // no existía
+  }
+
+  res.sendStatus(200); // borrado correcto
+});
 
 //index-JPA.js
 const dataJavi = [
