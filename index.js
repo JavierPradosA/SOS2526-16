@@ -262,7 +262,7 @@ app.get("/api/v1/global-ev-sales", (req, res) => {
   // filtro por region
   if (req.query.region) {
     resulta = resulta.filter(d =>
-      d.country === req.query.region.toLowerCase()
+      d.region === req.query.region.toLowerCase()
     );
   }
 
