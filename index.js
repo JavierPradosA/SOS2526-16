@@ -1,7 +1,11 @@
-let express = require("express");
-let cool = require("cool-ascii-faces");
-let path = require("path");
-let bodyParser = require("body-parser");
+//let express = require("express");
+import express from 'express'
+//let cool = require("cool-ascii-faces");
+import cool from 'cool-ascii-faces'
+//let path = require("path");
+import path from 'path'
+//let bodyParser = require("body-parser");
+import bodyParser from 'body-parser';
 
 let app = express();
 
