@@ -1,7 +1,11 @@
-let express = require("express");
-let cool = require("cool-ascii-faces");
-let path = require("path");
-let bodyParser = require("body-parser");
+//let express = require("express");
+import express from 'express'
+//let cool = require("cool-ascii-faces");
+import cool from 'cool-ascii-faces'
+//let path = require("path");
+import path from 'path'
+//let bodyParser = require("body-parser");
+import bodyParser from 'body-parser';
 
 let app = express();
 
@@ -195,108 +199,80 @@ const datos = [
 
 let dataII = [];
 
+
+// LOAD INITIAL DATA
 app.get("/api/v1/global-ev-sales/loadInitialData", (req, res) => {
   if (dataII.length === 0) {
     dataII = datos.slice();
-    res.status(201).send("Los datos han sido cargados")
-
+    res.status(201).send("Los datos han sido cargados");
   } else {
-    res.status(409).send("Ya hay datos cargados")
+    res.status(409).send("Ya hay datos cargados");
   }
-}
-);
-
-app.get("/samples/IMM", (req, res) => {
-  // 2. Definir la región objetivo
-  const regionObjetivo = 'Finland';
-
-  let mediaImpacto = null;
-
-  // 3. Algoritmo usando iteradores (filter, map, reduce)
-  // Primero, filtramos las filas correspondientes a la región objetivo
-  const datosFiltrados = datos.filter(fila => fila.region === regionObjetivo);
-
-  if (datosFiltrados.length > 0) {
-    // Usamos map para aislar los valores de 'economic_impact' en un nuevo array
-    const impactos = datosFiltrados.map(fila => fila.economic_impact);
-
-    // Usamos reduce para sumar todos esos valores
-    const sumaTotal = impactos.reduce((acumulador, valorActual) => acumulador + valorActual, 0);
-
-    // Calculamos la media aritmética
-    mediaImpacto = sumaTotal / impactos.length;
-  }
-
-  res.send(`La media de impacto económico de ${regionObjetivo} es ${mediaImpacto}`)
-})
-
-//GET lista datos IMM
-app.get("/api/v1/global-ev-sales", (req, res) => {
-  res.json(dataII);
-}
-);
-//GET dato IMM
-app.get("/api/v1/global-ev-sales", (req, res) => {
-
-  if (resource) {
-    res.json(dataII);
-  }
-  else {
-    res.status(404).send("Recurso no encontrado")
-  }
-
-  //Filtrado de datos por el país
-  let finland = dataII.filter(d => d.region === "Finland");
-
-
-  let media_finland_value = finland.reduce((acc, d) => acc + d.value, 0) / finland.length;
-
-  //Mostramos la media por pantalla
-  res.send(`The average charging point in Finland is ${media_finland_value}`);
 });
 
-//Get colección
+
+// SAMPLE
+app.get("/samples/IMM", (req, res) => {
+
+  if (dataII.length === 0) {
+    return res.send("Aún no hay datos cargados");
+  }
+
+  const regionObjetivo = "Finland";
+
+  const filtrados = dataII.filter(d =>
+    d.region.toLowerCase() === regionObjetivo.toLowerCase()
+  );
+
+  const media =
+    filtrados.reduce((acc, d) => acc + d.economic_impact, 0) /
+    filtrados.length;
+
+  res.send(`La media de impacto económico de ${regionObjetivo} es ${media}`);
+});
+
+
+// GET COLECCIÓN
 app.get("/api/v1/global-ev-sales", (req, res) => {
+
   let resulta = dataII;
 
-  // filtro por region
   if (req.query.region) {
     resulta = resulta.filter(d =>
-      d.region === req.query.region.toLowerCase()
+      d.region.toLowerCase() === req.query.region.toLowerCase()
     );
   }
 
-  // filtro por year exacto
   if (req.query.year) {
-    result = result.filter(d =>
+    resulta = resulta.filter(d =>
       d.year == Number(req.query.year)
     );
   }
 
-  // filtro desde
   if (req.query.from) {
     resulta = resulta.filter(d =>
       d.year >= Number(req.query.from)
     );
   }
 
-  // filtro hasta
   if (req.query.to) {
     resulta = resulta.filter(d =>
       d.year <= Number(req.query.to)
     );
   }
 
-  res.json(resulta); // siempre array
+  res.json(resulta);
 });
 
-//Get individual
+
+// GET INDIVIDUAL
 app.get("/api/v1/global-ev-sales/:region/:year", (req, res) => {
+
   const { region, year } = req.params;
 
   const item = dataII.find(d =>
     d.region.toLowerCase() === region.toLowerCase() &&
-    Number(d.year) == Number(year)
+    d.year == Number(year)
   );
 
   if (!item) {
@@ -306,58 +282,69 @@ app.get("/api/v1/global-ev-sales/:region/:year", (req, res) => {
   res.json(item);
 });
 
-//POST
+
+// POST
 app.post("/api/v1/global-ev-sales", (req, res) => {
+
   const newItem = req.body;
+
   if (!newItem.region || !newItem.year) {
-    return res.sendStatus(400)
-  }
-  if (newItem.region) {
-    newItem.region = newItem.region.toLowerCase();
+    return res.sendStatus(400);
   }
 
-  // comprobar si ya existe (misma clave)
-  const exists = dataII.find(
-    d => d.region === newItem.region &&
-      d.year == newItem.year
+  newItem.region = newItem.region.toLowerCase();
+
+  const exists = dataII.find(d =>
+    d.region === newItem.region &&
+    d.year == newItem.year
   );
 
   if (exists) {
-    return res.sendStatus(409); // ya existe
+    return res.sendStatus(409);
   }
 
   dataII.push(newItem);
-  res.sendStatus(201); // creado
+
+  res.sendStatus(201);
 });
 
-//PUT
+
+// PUT
 app.put("/api/v1/global-ev-sales/:region/:year", (req, res) => {
+
   const { region, year } = req.params;
+
   if (req.body.region) {
     req.body.region = req.body.region.toLowerCase();
   }
 
-  const index = dataII.findIndex(
-    d => d.region === region.toLowerCase() &&
-      d.year == Number(year)
+  const index = dataII.findIndex(d =>
+    d.region === region.toLowerCase() &&
+    d.year == Number(year)
   );
 
   if (index === -1) {
-    return res.sendStatus(404); // no existe
+    return res.sendStatus(404);
   }
 
-  dataII[index] = req.body; // reemplazo completo
+  dataII[index] = req.body;
+
   res.sendStatus(200);
 });
 
-//Delete coleccion
+
+// DELETE COLECCIÓN
 app.delete("/api/v1/global-ev-sales", (req, res) => {
+
   dataII = [];
+
   res.sendStatus(200);
 });
 
-//Delete individual
+
+// DELETE INDIVIDUAL
 app.delete("/api/v1/global-ev-sales/:region/:year", (req, res) => {
+
   const antes = dataII.length;
 
   dataII = dataII.filter(d =>
@@ -366,13 +353,14 @@ app.delete("/api/v1/global-ev-sales/:region/:year", (req, res) => {
   );
 
   if (dataII.length === antes) {
-    return res.sendStatus(404); // no existía
+    return res.sendStatus(404);
   }
 
-  res.sendStatus(200); // borrado correcto
+  res.sendStatus(200);
 });
 
-//index-JPA.js
+// index-JPA.js
+
 const dataJavi = [
   { country: "germany", year: 2021, charging_point: 63898, ac_slow: 1809, dc_fast: 3451, total_power_kw: 1812933 },
   { country: "canada", year: 2023, charging_point: 26108, ac_slow: 15581, dc_fast: 2076, total_power_kw: 415585 },
@@ -385,80 +373,92 @@ const dataJavi = [
   { country: "monaco", year: 2019, charging_point: 18, ac_slow: 3, dc_fast: 6, total_power_kw: 343 },
   { country: "germany", year: 2023, charging_point: 129456, ac_slow: 3017, dc_fast: 6467, total_power_kw: 4569267 }
 ];
+
 let dataIII = [];
 
+// LOAD INITIAL DATA
 app.get("/api/v1/global-ev-charging-infrastructures/loadInitialData", (req, res) => {
+
+  //Si dataIII no tiene nada, le cargamos los datos y mandamos 201 created
   if (dataIII.length === 0) {
     dataIII = dataJavi.slice();
-    res.status(201).send("Los datos han sido cargados");
-
+    res.sendStatus(201);
   } else {
-    res.status(409).send("Ya hay datos cargados");
+    //Si ya estaban cargados los datos mandamos 409 conflict ya que se intenta cargar
+    //sobre lo que ya existe
+    res.sendStatus(409);
   }
-}
-);
+
+});
 
 
+// SAMPLE
 app.get("/samples/JPA", (req, res) => {
+
   if (dataIII.length === 0) {
-    return res.send(`Aun no hay datos cargados`)
+    return res.send("Aun no hay datos cargados");
   }
-  //Filtrado de datos por el país
+
   let germany = dataIII.filter(d => d.country === "germany");
 
-  /*Se usa reduce para que al acumulador inicado a 0 se 
-  le vayan sumando los puntos de carga de los datos filtrados
-  y luego se divide entre el total de datos filtrados*/
-  let media_german_CP = germany.reduce((acc, d) => acc + d.charging_point, 0) / germany.length;
+  let media = germany.reduce((acc, d) => acc + d.charging_point, 0) / germany.length;
 
-  //Mostramos la media por pantalla
-  res.send(`The average charging point in Germany is ${media_german_CP}`);
-})
+  res.send(`The average charging point in Germany is ${media}`);
+});
 
-//Get colección
+
+// GET COLECCIÓN
 app.get("/api/v1/global-ev-charging-infrastructures", (req, res) => {
+
+  //Inicializamos result con los datos
   let result = dataIII;
 
-  // filtro por country
+  //En caso de que la query tenga pais, filtramos y modificamos result por ese pais
   if (req.query.country) {
     result = result.filter(d =>
       d.country === req.query.country.toLowerCase()
     );
   }
 
-  // filtro por year exacto
+  //Si la query tiene un año, filtramos y modificamos result por ese año
   if (req.query.year) {
     result = result.filter(d =>
       d.year == Number(req.query.year)
     );
   }
 
-  // filtro desde
+  //Si la query tiene rango de años (from y to), filtramos y modificamos result
+  //por ese año
   if (req.query.from) {
     result = result.filter(d =>
       d.year >= Number(req.query.from)
     );
   }
 
-  // filtro hasta
   if (req.query.to) {
     result = result.filter(d =>
       d.year <= Number(req.query.to)
     );
   }
 
-  res.json(result); // siempre array
+  res.json(result);
 });
 
-//Get individual
-app.get("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
-  const { country, year } = req.params;
 
+// GET INDIVIDUAL
+app.get("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
+
+  //Almacenamos pais y año de la query
+  const country = req.params.country;
+  const year = req.params.year;
+
+  //Buscamos en dataIII el datos que cumple con la petición
   const item = dataIII.find(d =>
     d.country === country.toLowerCase() &&
     d.year == Number(year)
   );
 
+  //Si no hay ninguno que cumpla 404 NOT FOUND
   if (!item) {
     return res.sendStatus(404);
   }
@@ -466,70 +466,117 @@ app.get("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) 
   res.json(item);
 });
 
-//POST
+
+// POST
 app.post("/api/v1/global-ev-charging-infrastructures", (req, res) => {
+
+  //El nuevo elemento que vamos a meter
   const newItem = req.body;
+
+  //En caso de que no tenga pais o año, 400 Bad request
   if (!newItem.country || !newItem.year) {
-    return res.sendStatus(400)
-  }
-  if (newItem.country) {
-    newItem.country = newItem.country.toLowerCase();
+    return res.sendStatus(400);
   }
 
-  // comprobar si ya existe (misma clave)
-  const exists = dataIII.find(
-    d => d.country === newItem.country &&
-      d.year == newItem.year
+  newItem.country = newItem.country.toLowerCase();
+
+  //Comprobamos que el dato no exita ya
+  const exists = dataIII.find(d =>
+    d.country === newItem.country &&
+    d.year == newItem.year
   );
 
+  //En caso de existir 409 Conflic
   if (exists) {
-    return res.sendStatus(409); // ya existe
+    return res.sendStatus(409);
   }
 
+  //Sino, introducimos el dato y 201 Created
   dataIII.push(newItem);
-  res.sendStatus(201); // creado
+
+  res.sendStatus(201);
 });
 
-//PUT
+
+// POST NO PERMITIDO SOBRE RECURSO, 405 not allowed
+app.post("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
+  res.sendStatus(405);
+});
+
+
+// PUT
 app.put("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
-  const { country, year } = req.params;
-  if (req.body.country) {
-    req.body.country = req.body.country.toLowerCase();
+
+  //Almacenamos pais, año y body
+  const country = req.params.country;
+  const year = req.params.year;
+  const body = req.body;
+
+  //En caso de no haber pais o año, 400 Bad Request
+  if (!body.country || !body.year) {
+    return res.sendStatus(400);
   }
 
-  const index = dataIII.findIndex(
-    d => d.country === country.toLowerCase() &&
-      d.year == Number(year)
+  //Si el pais del body o el año no coinciden con el de la query, 400
+  if (
+    body.country.toLowerCase() !== country.toLowerCase() ||
+    Number(body.year) !== Number(year)
+  ) {
+    return res.sendStatus(400);
+  }
+
+  //Buscamos el indice del dato a modificar
+  const index = dataIII.findIndex(d =>
+    d.country === country.toLowerCase() &&
+    d.year == Number(year)
   );
 
+  //Sino existe ese dato, 404 not found
   if (index === -1) {
-    return res.sendStatus(404); // no existe
+    return res.sendStatus(404);
   }
 
-  dataIII[index] = req.body; // reemplazo completo
+  body.country = body.country.toLowerCase();
+
+  dataIII[index] = body;
+
   res.sendStatus(200);
 });
 
-//Delete coleccion
+
+// PUT NO PERMITIDO SOBRE COLECCIÓN, 405 not allowed
+app.put("/api/v1/global-ev-charging-infrastructures", (req, res) => {
+  res.sendStatus(405);
+});
+
+
+// DELETE COLECCIÓN
 app.delete("/api/v1/global-ev-charging-infrastructures", (req, res) => {
+
   dataIII = [];
+
   res.sendStatus(200);
 });
 
-//Delete individual
+
+// DELETE INDIVIDUAL
 app.delete("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
+
+  //Guardamos la longitud de antes
   const before = dataIII.length;
 
+  //Modificamos dataIII eliminando el dato de la query
   dataIII = dataIII.filter(d =>
     !(d.country === req.params.country.toLowerCase() &&
       d.year == Number(req.params.year))
   );
 
+  //Si la longitud sigue siendo la misma, 404 not found
   if (dataIII.length === before) {
-    return res.sendStatus(404); // no existía
+    return res.sendStatus(404);
   }
 
-  res.sendStatus(200); // borrado correcto
+  res.sendStatus(200);
 });
 
 const PORT = process.env.PORT || 3000;
