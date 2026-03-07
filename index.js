@@ -95,6 +95,11 @@ app.get("/api/v1/global-ev-stock-volumes/:region_country/:year", (req, res) => {
 
 }
 );
+//Método no permitido, POST sobre dato
+app.post(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
+  res.sendStatus(405);
+});
+
 
 //POST Dato; No debe permitir realizar post sobre otro dato
 app.post(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
@@ -121,7 +126,10 @@ app.post(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
 
 });
 
-
+//Método no permitido, PUT sobre la lista general
+app.put(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
+  res.sendStatus(405);
+});
 
 //PUT dato; No debe permitir realizar put a la lista general
 app.put(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
