@@ -6,6 +6,10 @@ import cool from 'cool-ascii-faces'
 import path from 'path'
 //let bodyParser = require("body-parser");
 import bodyParser from 'body-parser';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let app = express();
 
