@@ -294,6 +294,21 @@ app.get("/api/v1/global-ev-sales/:region/:year", (req, res) => {
   res.json(item);
 });
 
+app.get("/api/v1/global-ev-sales/:region", (req, res) => {
+
+  const { region } = req.params;
+
+  const item = dataII.find(d =>
+    d.region.toLowerCase() === region.toLowerCase() &&
+  );
+
+  if (!item) {
+    return res.sendStatus(404);
+  }
+
+  res.json(item);
+});
+
 
 // POST
 app.post("/api/v1/global-ev-sales/:region/:year", (req, res) => {
