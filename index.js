@@ -1,12 +1,13 @@
 //let express = require("express");
 import express from 'express'
-//let cool = require("cool-ascii-faces");
-import cool from 'cool-ascii-faces'
-//let path = require("path");
+
 import path from 'path'
 //let bodyParser = require("body-parser");
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
+
+//Import apis
+import chargingAPI from "./apis/global-ev-charging-infraestructures.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,9 +18,8 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(bodyParser.json());
 
-app.get("/cool", (req, res) => {
-  res.send(cool());
-});
+
+app.use("/api/v1/global-ev-charging-infrastructures", chargingAPI);
 
 app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "about.html"));
@@ -197,16 +197,16 @@ app.delete(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req
 
 // 1. Inicializar el array
 const datos = [
-  { region: 'australia', category: 'Historical', parameter: 'EV stock share', mode: 'Cars', powertrain: 'EV', year: 2011, unit: 'Percent', value: 0.000039253245, economic_impact: 0 },
-  { region: 'finland', category: 'Historical', parameter: 'EV stock share', mode: 'Vans', powertrain: 'EV', year: 2021, unit: 'Percent', value: 0.3, economic_impact: 0 },
-  { region: 'finland', category: 'Historical', parameter: 'EV stock share', mode: 'Buses', powertrain: 'BEV', year: 2022, unit: 'Vehicles', value: 550, economic_impact: 154.9 },
-  { region: 'usa', category: 'Projection-STEPS', parameter: 'EV charging points', mode: 'EV', powertrain: 'Publicly available fast', year: 2021, unit: 'Charging Points', value: 22000, economic_impact: 358.64 },
-  { region: 'netherlands', category: 'Historical', parameter: 'EV stock', mode: 'Trucks', powertrain: 'PHEV', year: 2020, unit: 'Vehicles', value: 41, economic_impact: 6.71 },
-  { region: 'finland', category: 'Historical', parameter: 'EV stock share', mode: 'Trucks', powertrain: 'EV', year: 2023, unit: 'Percent', value: 0.119, economic_impact: 0 },
-  { region: 'seychelles', category: 'Historical', parameter: 'EV sales', mode: 'Cars', powertrain: 'BEV', year: 2020, unit: 'Vehicles', value: 26, economic_impact: 1.07 },
-  { region: 'germany', category: 'Historical', parameter: 'EV stock', mode: 'Vans', powertrain: 'BEV', year: 2021, unit: 'Vehicles', value: 41000, economic_impact: 2340.04 },
-  { region: 'finland', category: 'Historical', parameter: 'EV sales', mode: 'Cars', powertrain: 'PHEV', year: 2013, unit: 'Vehicles', value: 170, economic_impact: 6.1 },
-  { region: 'finland', category: 'Historical', parameter: 'EV sales', mode: 'Buses', powertrain: 'BEV', year: 2016, unit: 'Vehicles', value: 13, economic_impact: 3.66 }
+  { region: 'Australia', category: 'Historical', parameter: 'EV stock share', mode: 'Cars', powertrain: 'EV', year: 2011, unit: 'Percent', value: 0.000039253245, economic_impact: 0 },
+  { region: 'Finland', category: 'Historical', parameter: 'EV stock share', mode: 'Vans', powertrain: 'EV', year: 2021, unit: 'Percent', value: 0.3, economic_impact: 0 },
+  { region: 'Finland', category: 'Historical', parameter: 'EV stock share', mode: 'Buses', powertrain: 'BEV', year: 2022, unit: 'Vehicles', value: 550, economic_impact: 154.9 },
+  { region: 'USA', category: 'Projection-STEPS', parameter: 'EV charging points', mode: 'EV', powertrain: 'Publicly available fast', year: 2021, unit: 'Charging Points', value: 22000, economic_impact: 358.64 },
+  { region: 'Netherlands', category: 'Historical', parameter: 'EV stock', mode: 'Trucks', powertrain: 'PHEV', year: 2020, unit: 'Vehicles', value: 41, economic_impact: 6.71 },
+  { region: 'Finland', category: 'Historical', parameter: 'EV stock share', mode: 'Trucks', powertrain: 'EV', year: 2023, unit: 'Percent', value: 0.119, economic_impact: 0 },
+  { region: 'Seychelles', category: 'Historical', parameter: 'EV sales', mode: 'Cars', powertrain: 'BEV', year: 2020, unit: 'Vehicles', value: 26, economic_impact: 1.07 },
+  { region: 'Germany', category: 'Historical', parameter: 'EV stock', mode: 'Vans', powertrain: 'BEV', year: 2021, unit: 'Vehicles', value: 41000, economic_impact: 2340.04 },
+  { region: 'Finland', category: 'Historical', parameter: 'EV sales', mode: 'Cars', powertrain: 'PHEV', year: 2013, unit: 'Vehicles', value: 170, economic_impact: 6.1 },
+  { region: 'Finland', category: 'Historical', parameter: 'EV sales', mode: 'Buses', powertrain: 'BEV', year: 2016, unit: 'Vehicles', value: 13, economic_impact: 3.66 }
 ];
 
 let dataII = [];
@@ -285,21 +285,6 @@ app.get("/api/v1/global-ev-sales/:region/:year", (req, res) => {
   const item = dataII.find(d =>
     d.region.toLowerCase() === region.toLowerCase() &&
     d.year == Number(year)
-  );
-
-  if (!item) {
-    return res.sendStatus(404);
-  }
-
-  res.json(item);
-});
-
-app.get("/api/v1/global-ev-sales/:region", (req, res) => {
-
-  const { region } = req.params;
-
-  const item = dataII.find(d =>
-    d.region.toLowerCase() === region.toLowerCase() &&
   );
 
   if (!item) {
@@ -388,226 +373,6 @@ app.delete("/api/v1/global-ev-sales/:region/:year", (req, res) => {
   );
 
   if (dataII.length === antes) {
-    return res.sendStatus(404);
-  }
-
-  res.sendStatus(200);
-});
-
-// index-JPA.js
-
-const dataJavi = [
-  { country: "germany", year: 2021, charging_point: 63898, ac_slow: 1809, dc_fast: 3451, total_power_kw: 1812933 },
-  { country: "canada", year: 2023, charging_point: 26108, ac_slow: 15581, dc_fast: 2076, total_power_kw: 415585 },
-  { country: "germany", year: 2019, charging_point: 31195, ac_slow: 416, dc_fast: 1975, total_power_kw: 836856 },
-  { country: "germany", year: 2020, charging_point: 45073, ac_slow: 1047, dc_fast: 2814, total_power_kw: 1244489 },
-  { country: "germany", year: 2022, charging_point: 90783, ac_slow: 2167, dc_fast: 4297, total_power_kw: 2748477 },
-  { country: "malta", year: 2023, charging_point: 394, ac_slow: 0, dc_fast: 47, total_power_kw: 10164 },
-  { country: "switzerland", year: 2023, charging_point: 13324, ac_slow: 1913, dc_fast: 887, total_power_kw: 470255 },
-  { country: "türkiye", year: 2023, charging_point: 12084, ac_slow: 311, dc_fast: 2117, total_power_kw: 646699 },
-  { country: "monaco", year: 2019, charging_point: 18, ac_slow: 3, dc_fast: 6, total_power_kw: 343 },
-  { country: "germany", year: 2023, charging_point: 129456, ac_slow: 3017, dc_fast: 6467, total_power_kw: 4569267 }
-];
-
-let dataIII = [];
-
-// LOAD INITIAL DATA
-app.get("/api/v1/global-ev-charging-infrastructures/loadInitialData", (req, res) => {
-
-  //Si dataIII no tiene nada, le cargamos los datos y mandamos 201 created
-  if (dataIII.length === 0) {
-    dataIII = dataJavi.slice();
-    res.sendStatus(201);
-  } else {
-    //Si ya estaban cargados los datos mandamos 409 conflict ya que se intenta cargar
-    //sobre lo que ya existe
-    res.sendStatus(409);
-  }
-
-});
-
-
-// SAMPLE
-app.get("/samples/JPA", (req, res) => {
-
-  if (dataIII.length === 0) {
-    return res.send("Aun no hay datos cargados");
-  }
-
-  let germany = dataIII.filter(d => d.country === "germany");
-
-  let media = germany.reduce((acc, d) => acc + d.charging_point, 0) / germany.length;
-
-  res.send(`The average charging point in Germany is ${media}`);
-});
-
-
-// GET COLECCIÓN
-app.get("/api/v1/global-ev-charging-infrastructures", (req, res) => {
-
-  //Inicializamos result con los datos
-  let result = dataIII;
-
-  //En caso de que la query tenga pais, filtramos y modificamos result por ese pais
-  if (req.query.country) {
-    result = result.filter(d =>
-      d.country === req.query.country.toLowerCase()
-    );
-  }
-
-  //Si la query tiene un año, filtramos y modificamos result por ese año
-  if (req.query.year) {
-    result = result.filter(d =>
-      d.year == Number(req.query.year)
-    );
-  }
-
-  //Si la query tiene rango de años (from y to), filtramos y modificamos result
-  //por ese año
-  if (req.query.from) {
-    result = result.filter(d =>
-      d.year >= Number(req.query.from)
-    );
-  }
-
-  if (req.query.to) {
-    result = result.filter(d =>
-      d.year <= Number(req.query.to)
-    );
-  }
-
-  res.json(result);
-});
-
-
-// GET INDIVIDUAL
-app.get("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
-
-  //Almacenamos pais y año de la query
-  const country = req.params.country;
-  const year = req.params.year;
-
-  //Buscamos en dataIII el datos que cumple con la petición
-  const item = dataIII.find(d =>
-    d.country === country.toLowerCase() &&
-    d.year == Number(year)
-  );
-
-  //Si no hay ninguno que cumpla 404 NOT FOUND
-  if (!item) {
-    return res.sendStatus(404);
-  }
-
-  res.json(item);
-});
-
-
-// POST
-app.post("/api/v1/global-ev-charging-infrastructures", (req, res) => {
-
-  //El nuevo elemento que vamos a meter
-  const newItem = req.body;
-
-  //En caso de que no tenga pais o año, 400 Bad request
-  if (!newItem.country || !newItem.year) {
-    return res.sendStatus(400);
-  }
-
-  newItem.country = newItem.country.toLowerCase();
-
-  //Comprobamos que el dato no exita ya
-  const exists = dataIII.find(d =>
-    d.country === newItem.country &&
-    d.year == newItem.year
-  );
-
-  //En caso de existir 409 Conflic
-  if (exists) {
-    return res.sendStatus(409);
-  }
-
-  //Sino, introducimos el dato y 201 Created
-  dataIII.push(newItem);
-
-  res.sendStatus(201);
-});
-
-
-// POST NO PERMITIDO SOBRE RECURSO, 405 not allowed
-app.post("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
-  res.sendStatus(405);
-});
-
-
-// PUT
-app.put("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
-
-  //Almacenamos pais, año y body
-  const country = req.params.country;
-  const year = req.params.year;
-  const body = req.body;
-
-  //En caso de no haber pais o año, 400 Bad Request
-  if (!body.country || !body.year) {
-    return res.sendStatus(400);
-  }
-
-  //Si el pais del body o el año no coinciden con el de la query, 400
-  if (
-    body.country.toLowerCase() !== country.toLowerCase() ||
-    Number(body.year) !== Number(year)
-  ) {
-    return res.sendStatus(400);
-  }
-
-  //Buscamos el indice del dato a modificar
-  const index = dataIII.findIndex(d =>
-    d.country === country.toLowerCase() &&
-    d.year == Number(year)
-  );
-
-  //Sino existe ese dato, 404 not found
-  if (index === -1) {
-    return res.sendStatus(404);
-  }
-
-  body.country = body.country.toLowerCase();
-
-  dataIII[index] = body;
-
-  res.sendStatus(200);
-});
-
-
-// PUT NO PERMITIDO SOBRE COLECCIÓN, 405 not allowed
-app.put("/api/v1/global-ev-charging-infrastructures", (req, res) => {
-  res.sendStatus(405);
-});
-
-
-// DELETE COLECCIÓN
-app.delete("/api/v1/global-ev-charging-infrastructures", (req, res) => {
-
-  dataIII = [];
-
-  res.sendStatus(200);
-});
-
-
-// DELETE INDIVIDUAL
-app.delete("/api/v1/global-ev-charging-infrastructures/:country/:year", (req, res) => {
-
-  //Guardamos la longitud de antes
-  const before = dataIII.length;
-
-  //Modificamos dataIII eliminando el dato de la query
-  dataIII = dataIII.filter(d =>
-    !(d.country === req.params.country.toLowerCase() &&
-      d.year == Number(req.params.year))
-  );
-
-  //Si la longitud sigue siendo la misma, 404 not found
-  if (dataIII.length === before) {
     return res.sendStatus(404);
   }
 
