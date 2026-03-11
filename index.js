@@ -278,6 +278,20 @@ app.get("/api/v1/global-ev-sales", (req, res) => {
   res.json(resulta);
 });
 
+// GET POR REGIÓN (Devuelve array con todos los registros de esa región)
+app.get("/api/v1/global-ev-sales/:region", (req, res) => {
+  const { region } = req.params;
+
+  const resultados = dataII.filter(d => 
+    d.region.toLowerCase() === region.toLowerCase()
+  );
+
+  if (resultados.length === 0) {
+    return res.sendStatus(404);
+  }
+
+  res.json(resultados);
+});
 
 // GET INDIVIDUAL
 app.get("/api/v1/global-ev-sales/:region/:year", (req, res) => {
