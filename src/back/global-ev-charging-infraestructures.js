@@ -1,4 +1,7 @@
 import express from "express";
+import dataStore from 'nedb';
+
+let db = new dataStore();
 
 const router = express.Router();
 
@@ -16,87 +19,91 @@ const initialData = [
   { country: "germany", year: 2023, charging_point: 129456, ac_slow: 3017, dc_fast: 6467, total_power_kw: 4569267 }
 ];
 
-let data = [];
+
 
 // LOAD INITIAL DATA
 router.get("/loadInitialData", (req, res) => {
 
-  if (data.length === 0) {
-    data = initialData.slice();
-    res.status(201).json(data);
-  } else {
-    res.sendStatus(409);
-  }
-
+  db.count({}, (err, count) => {
+    if (count === 0) {
+      db.insert(initialData, () => {
+        res.sendStatus(201);
+      });
+    } else {
+      res.sendStatus(409);
+    }
+  });
 });
 
 // GET COLECCIÓN
 router.get("/", (req, res) => {
 
-  let result = data;
+  db.find({}, { _id: 0 }, (err, result) => {
 
-  // FILTROS
-  if (req.query.country) {
-    result = result.filter(d =>
-      d.country === req.query.country.toLowerCase()
-    );
-  }
+    // FILTROS
+    if (req.query.country) {
+      result = result.filter(d =>
+        d.country === req.query.country.toLowerCase()
+      );
+    }
 
-  if (req.query.year) {
-    result = result.filter(d =>
-      d.year == Number(req.query.year)
-    );
-  }
+    if (req.query.year) {
+      result = result.filter(d =>
+        d.year == Number(req.query.year)
+      );
+    }
 
-  if (req.query.charging_point) {
-    result = result.filter(d =>
-      d.charging_point == Number(req.query.charging_point)
-    );
-  }
+    if (req.query.charging_point) {
+      result = result.filter(d =>
+        d.charging_point == Number(req.query.charging_point)
+      );
+    }
 
-  if (req.query.ac_slow) {
-    result = result.filter(d =>
-      d.ac_slow == Number(req.query.ac_slow)
-    );
-  }
+    if (req.query.ac_slow) {
+      result = result.filter(d =>
+        d.ac_slow == Number(req.query.ac_slow)
+      );
+    }
 
-  if (req.query.dc_fast) {
-    result = result.filter(d =>
-      d.dc_fast == Number(req.query.dc_fast)
-    );
-  }
+    if (req.query.dc_fast) {
+      result = result.filter(d =>
+        d.dc_fast == Number(req.query.dc_fast)
+      );
+    }
 
-  if (req.query.total_power_kw) {
-    result = result.filter(d =>
-      d.total_power_kw == Number(req.query.total_power_kw)
-    );
-  }
+    if (req.query.total_power_kw) {
+      result = result.filter(d =>
+        d.total_power_kw == Number(req.query.total_power_kw)
+      );
+    }
 
-  if (req.query.from) {
-    result = result.filter(d =>
-      d.year >= Number(req.query.from)
-    );
-  }
+    if (req.query.from) {
+      result = result.filter(d =>
+        d.year >= Number(req.query.from)
+      );
+    }
 
-  if (req.query.to) {
-    result = result.filter(d =>
-      d.year <= Number(req.query.to)
-    );
-  }
+    if (req.query.to) {
+      result = result.filter(d =>
+        d.year <= Number(req.query.to)
+      );
+    }
 
-  // PAGINACIÓN
-  let offset = Number(req.query.offset);
-  let limit = Number(req.query.limit);
+    // PAGINACIÓN
+    let offset = Number(req.query.offset);
+    let limit = Number(req.query.limit);
 
-  if (offset) {
-    result = result.slice(offset);
-  }
+    if (offset) {
+      result = result.slice(offset);
+    }
 
-  if (limit) {
-    result = result.slice(0, limit);
-  }
+    if (limit) {
+      result = result.slice(0, limit);
+    }
 
-  res.json(result);
+    res.json(result);
+  });
+
 
 });
 
@@ -106,17 +113,18 @@ router.get("/:country/:year", (req, res) => {
   const country = req.params.country.toLowerCase();
   const year = Number(req.params.year);
 
-  const item = data.find(d =>
-    d.country === country &&
-    d.year === year
-  );
+  db.findOne(
+    { country: country, year: year },
+    { _id: 0 },
+    (err, item) => {
 
-  if (!item) {
-    return res.sendStatus(404);
-  }
+      if (!item) {
+        return res.sendStatus(404);
+      }
 
-  res.json(item);
+      res.json(item);
 
+    });
 });
 
 // POST
@@ -124,7 +132,6 @@ router.post("/", (req, res) => {
 
   const newItem = req.body;
 
-  // VALIDACIÓN JSON
   if (
     !newItem.country ||
     !newItem.year ||
@@ -136,20 +143,22 @@ router.post("/", (req, res) => {
     return res.sendStatus(400);
   }
 
-  newItem.country = newItem.country.toLowerCase();
+  db.findOne(
+    { country: newItem.country.toLowerCase(), year: newItem.year },
+    (err, existing) => {
 
-  const exists = data.find(d =>
-    d.country === newItem.country &&
-    d.year == newItem.year
+      if (existing) {
+        return res.sendStatus(409);
+      }
+
+      newItem.country = newItem.country.toLowerCase();
+
+      db.insert(newItem, () => {
+        res.sendStatus(201);
+      });
+
+    }
   );
-
-  if (exists) {
-    return res.sendStatus(409);
-  }
-
-  data.push(newItem);
-
-  res.sendStatus(201);
 
 });
 
@@ -174,20 +183,19 @@ router.put("/:country/:year", (req, res) => {
     return res.sendStatus(400);
   }
 
-  const index = data.findIndex(d =>
-    d.country === country &&
-    d.year === year
-  );
+  db.update(
+    { country: country, year: year },
+    body,
+    {},
+    (err, updated) => {
 
-  if (index === -1) {
-    return res.sendStatus(404);
-  }
+      if (updated === 0) {
+        return res.sendStatus(404);
+      }
 
-  body.country = body.country.toLowerCase();
+      res.sendStatus(200);
 
-  data[index] = body;
-
-  res.sendStatus(200);
+    });
 
 });
 
@@ -199,9 +207,11 @@ router.put("/", (req, res) => {
 // DELETE COLECCIÓN
 router.delete("/", (req, res) => {
 
-  data = [];
+  db.remove({}, { multi: true }, () => {
 
-  res.sendStatus(200);
+    res.sendStatus(200);
+
+  });
 
 });
 
@@ -211,17 +221,19 @@ router.delete("/:country/:year", (req, res) => {
   const country = req.params.country.toLowerCase();
   const year = Number(req.params.year);
 
-  const before = data.length;
+  db.remove(
+    { country: country, year: year },
+    {},
+    (err, removed) => {
 
-  data = data.filter(d =>
-    !(d.country === country && d.year === year)
+      if (removed === 0) {
+        return res.sendStatus(404);
+      }
+
+      res.sendStatus(200);
+
+    }
   );
-
-  if (data.length === before) {
-    return res.sendStatus(404);
-  }
-
-  res.sendStatus(200);
 
 });
 
