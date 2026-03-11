@@ -7,7 +7,7 @@ import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 
 //Import apis
-import chargingAPI from "./apis/global-ev-charging-infraestructures.js";
+import chargingAPI from "./src/back/global-ev-charging-infraestructures.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
