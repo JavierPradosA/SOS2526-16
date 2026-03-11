@@ -240,7 +240,7 @@ router.delete("/:country/:year", (req, res) => {
 // DOCS
 router.get("/docs", (req, res) => {
 
-  res.redirect("url_postman");
+  res.redirect("https://pradosacostajavier-6863314.postman.co/workspace/Javier-Prados-Acosta's-Workspac~2ec2f352-a021-4090-8f1b-2d6a4974099f/collection/52367690-9b8b9f5b-42b4-4622-a20b-70da4fe91823?action=share&creator=52367690");
 
 });
 
