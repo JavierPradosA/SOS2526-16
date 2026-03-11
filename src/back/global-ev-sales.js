@@ -51,6 +51,11 @@ router.get("/loadInitialData", (req, res) => {
   });
 });
 
+router.get("/docs", (req, res) => {
+  // Aquí pondremos el enlace público que te dará Postman
+  res.redirect("https://documenter.getpostman.com/view/52408123/2sBXiesa2T");
+});
+
 // GET COLECCIÓN (Con búsquedas y paginación)
 router.get("/", (req, res) => {
 
