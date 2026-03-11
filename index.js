@@ -216,9 +216,11 @@ let dataII = [];
 app.get("/api/v1/global-ev-sales/loadInitialData", (req, res) => {
   if (dataII.length === 0) {
     dataII = datos.slice();
-    res.status(201).send("Los datos han sido cargados");
+  
+    res.status(201).json(dataII);
   } else {
-    res.status(409).send("Ya hay datos cargados");
+    
+    res.sendStatus(409);
   }
 });
 
@@ -296,60 +298,45 @@ app.get("/api/v1/global-ev-sales/:region/:year", (req, res) => {
 
 
 // POST
-app.post("/api/v1/global-ev-sales/:region/:year", (req, res) => {
-  res.sendStatus(405);
-});
-
 app.post("/api/v1/global-ev-sales", (req, res) => {
-
   const newItem = req.body;
 
   if (!newItem.region || !newItem.year) {
     return res.sendStatus(400);
   }
 
-  newItem.region = newItem.region.toLowerCase();
-
   const exists = dataII.find(d =>
-    d.region === newItem.region &&
-    d.year == newItem.year
+    d.region.toLowerCase() === newItem.region.toLowerCase() &&
+    Number(d.year) === Number(newItem.year)
   );
 
   if (exists) {
-    return res.sendStatus(409);
+    return res.sendStatus(409); // Ya existe
   }
 
   dataII.push(newItem);
-
   res.sendStatus(201);
 });
 
 
-// PUT
-app.put("/api/v1/global-ev-sales", (req, res) => {
-  res.sendStatus(405);
-});
+// POST
+app.post("/api/v1/global-ev-sales", (req, res) => {
+  const newItem = req.body;
 
-app.put("/api/v1/global-ev-sales/:region/:year", (req, res) => {
-
-  const { region, year } = req.params;
-
-  if (req.body.region) {
-    req.body.region = req.body.region.toLowerCase();
+  if (!newItem.region || !newItem.year) {
+    return res.sendStatus(400);
   }
-
-  const index = dataII.findIndex(d =>
-    d.region === region.toLowerCase() &&
-    d.year == Number(year)
+  const exists = dataII.find(d =>
+    d.region.toLowerCase() === newItem.region.toLowerCase() &&
+    Number(d.year) === Number(newItem.year)
   );
 
-  if (index === -1) {
-    return res.sendStatus(404);
+  if (exists) {
+    return res.sendStatus(409); // Ya existe
   }
 
-  dataII[index] = req.body;
-
-  res.sendStatus(200);
+  dataII.push(newItem);
+  res.sendStatus(201);
 });
 
 
