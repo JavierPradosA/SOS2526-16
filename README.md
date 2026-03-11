@@ -9,3 +9,5 @@
 - **Render**: https://sos2526-16.onrender.com
 - **APIs**
   - Javier Prados Acosta: https://sos2526-16.onrender.com/api/v1/global-ev-charging-infrastructures
+  - Adrián Rico Hernández: https://sos2526-16.onrender.com/api/v1/global-ev-stock-volumes
+  - Ignacio Merino Martínez: https://sos2526-16.onrender.com/api/v1/global-ev-sales
