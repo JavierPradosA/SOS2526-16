@@ -153,6 +153,8 @@ router.post("/", (req, res) => {
 
       newItem.country = newItem.country.toLowerCase();
 
+      delete newItem._id;
+
       db.insert(newItem, () => {
         res.sendStatus(201);
       });
@@ -183,6 +185,8 @@ router.put("/:country/:year", (req, res) => {
     return res.sendStatus(400);
   }
 
+  delete body._id;
+  
   db.update(
     { country: country, year: year },
     body,
