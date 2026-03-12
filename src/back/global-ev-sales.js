@@ -1,3 +1,6 @@
+import util from 'util';
+util.isDate = util.isDate || function(d) { return d instanceof Date; };
+util.isRegExp = util.isRegExp || function(re) { return re instanceof RegExp; };
 import express from "express";
 import dataStore from 'nedb';
 
@@ -39,10 +42,23 @@ function estructuraValida(body) {
 // ==========================================
 
 // LOAD INITIAL DATA
+// LOAD INITIAL DATA
 router.get("/loadInitialData", (req, res) => {
   db.count({}, (err, count) => {
+    if (err) {
+      console.log("Error al contar:", err);
+      return res.sendStatus(500);
+    }
+    
     if (count === 0) {
-      db.insert(datos, () => {
+
+      const clonDatos = JSON.parse(JSON.stringify(datos));
+      
+      db.insert(clonDatos, (err, newDocs) => {
+        if (err) {
+          console.log("FALLO CRÍTICO AL INSERTAR DATOS INICIALES:", err);
+          return res.sendStatus(500); // Si falla, que devuelva 500
+        }
         res.sendStatus(201);
       });
     } else {
@@ -117,11 +133,21 @@ router.post("/", (req, res) => {
     return res.sendStatus(400);
   }
 
-  db.findOne({ region: newItem.region, year: newItem.year }, (err, existing) => {
+  // Aseguramos que el año se busca como Número por si Postman lo envía como Texto
+  const yearBusqueda = Number(newItem.year);
+
+  db.findOne({ region: newItem.region, year: yearBusqueda }, (err, existing) => {
+    if (err) console.log("Error al buscar en POST:", err);
+    
     if (existing) {
       return res.sendStatus(409);
     }
-    db.insert(newItem, () => {
+    
+    db.insert(newItem, (err, docCreado) => {
+      if (err) {
+        console.log("FALLO CRÍTICO AL HACER EL POST:", err);
+        return res.sendStatus(500);
+      }
       res.sendStatus(201);
     });
   });

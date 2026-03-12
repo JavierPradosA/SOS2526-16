@@ -1,0 +1,23 @@
+{"region":"Australia","category":"Historical","parameter":"EV stock share","mode":"Cars","powertrain":"EV","year":2011,"unit":"Percent","value":0.000039253245,"economic_impact":0,"_id":"Fz0A6Is3ZmbnjrbV"}
+{"region":"Finland","category":"Historical","parameter":"EV stock share","mode":"Vans","powertrain":"EV","year":2021,"unit":"Percent","value":0.3,"economic_impact":0,"_id":"QPpJWYgmKoMcnuoH"}
+{"region":"Finland","category":"Historical","parameter":"EV stock share","mode":"Buses","powertrain":"BEV","year":2022,"unit":"Vehicles","value":550,"economic_impact":154.9,"_id":"pvOqbNg3uAuKA8lJ"}
+{"region":"USA","category":"Projection-STEPS","parameter":"EV charging points","mode":"EV","powertrain":"Publicly available fast","year":2021,"unit":"Charging Points","value":22000,"economic_impact":358.64,"_id":"ZOLlXRsyPwRpb7tM"}
+{"region":"Netherlands","category":"Historical","parameter":"EV stock","mode":"Trucks","powertrain":"PHEV","year":2020,"unit":"Vehicles","value":41,"economic_impact":6.71,"_id":"NRIhAscUwqp576OQ"}
+{"region":"Finland","category":"Historical","parameter":"EV stock share","mode":"Trucks","powertrain":"EV","year":2023,"unit":"Percent","value":0.119,"economic_impact":0,"_id":"tMxvYMTzVnlffzA7"}
+{"region":"Seychelles","category":"Historical","parameter":"EV sales","mode":"Cars","powertrain":"BEV","year":2020,"unit":"Vehicles","value":26,"economic_impact":1.07,"_id":"wWXyUXJxkPiNJ2zs"}
+{"region":"Germany","category":"Historical","parameter":"EV stock","mode":"Vans","powertrain":"BEV","year":2021,"unit":"Vehicles","value":41000,"economic_impact":2340.04,"_id":"ZeQzd6YpbpzBhprY"}
+{"region":"Finland","category":"Historical","parameter":"EV sales","mode":"Cars","powertrain":"PHEV","year":2013,"unit":"Vehicles","value":170,"economic_impact":6.1,"_id":"P6CdnYq90WggYMED"}
+{"region":"Finland","category":"Historical","parameter":"EV sales","mode":"Buses","powertrain":"BEV","year":2016,"unit":"Vehicles","value":13,"economic_impact":3.66,"_id":"dJkQDFvJq0BomYbe"}
+{"region":"Spain","category":"Historical","parameter":"EV sales","mode":"Cars","powertrain":"BEV","year":2024,"unit":"Vehicles","value":50000,"economic_impact":150.5,"_id":"SwmuAEIvEfX6ci9W"}
+{"region":"Spain","category":"Historical","parameter":"EV sales","mode":"Cars","powertrain":"BEV","year":2024,"unit":"Vehicles","value":99999,"economic_impact":150.5,"_id":"SwmuAEIvEfX6ci9W"}
+{"$$deleted":true,"_id":"SwmuAEIvEfX6ci9W"}
+{"$$deleted":true,"_id":"Fz0A6Is3ZmbnjrbV"}
+{"$$deleted":true,"_id":"NRIhAscUwqp576OQ"}
+{"$$deleted":true,"_id":"P6CdnYq90WggYMED"}
+{"$$deleted":true,"_id":"QPpJWYgmKoMcnuoH"}
+{"$$deleted":true,"_id":"ZOLlXRsyPwRpb7tM"}
+{"$$deleted":true,"_id":"ZeQzd6YpbpzBhprY"}
+{"$$deleted":true,"_id":"dJkQDFvJq0BomYbe"}
+{"$$deleted":true,"_id":"pvOqbNg3uAuKA8lJ"}
+{"$$deleted":true,"_id":"tMxvYMTzVnlffzA7"}
+{"$$deleted":true,"_id":"wWXyUXJxkPiNJ2zs"}
