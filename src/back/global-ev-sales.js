@@ -88,11 +88,11 @@ router.get("/", (req, res) => {
   });
 });
 
-// GET POR REGIÓN 
+// GET POR REGIÓN (Tu requisito especial)
 router.get("/:region", (req, res) => {
   const region = req.params.region;
- 
-  db.find({ region: new RegExp('^' + region + '$', 'i') }, { _id: 0 }, (err, result) => {
+  
+  db.find({ region: region }, { _id: 0 }, (err, result) => {
     if (result.length === 0) return res.sendStatus(404);
     res.json(result);
   });
@@ -103,7 +103,7 @@ router.get("/:region/:year", (req, res) => {
   const region = req.params.region;
   const year = Number(req.params.year);
 
-  db.findOne({ region: new RegExp('^' + region + '$', 'i'), year: year }, { _id: 0 }, (err, item) => {
+  db.findOne({ region: region, year: year }, { _id: 0 }, (err, item) => {
     if (!item) return res.sendStatus(404);
     res.json(item);
   });
@@ -113,13 +113,11 @@ router.get("/:region/:year", (req, res) => {
 router.post("/", (req, res) => {
   const newItem = req.body;
 
-  // Validación estricta 400
   if (!estructuraValida(newItem)) {
     return res.sendStatus(400);
   }
 
-  // Comprobar si existe para lanzar 409
-  db.findOne({ region: new RegExp('^' + newItem.region + '$', 'i'), year: newItem.year }, (err, existing) => {
+  db.findOne({ region: newItem.region, year: newItem.year }, (err, existing) => {
     if (existing) {
       return res.sendStatus(409);
     }
@@ -139,22 +137,21 @@ router.put("/:region/:year", (req, res) => {
   const yearUrl = Number(req.params.year);
   const body = req.body;
 
-
   if (
     !estructuraValida(body) || 
-    body.region.toLowerCase() !== regionUrl.toLowerCase() || 
+    body.region !== regionUrl || 
     Number(body.year) !== yearUrl
   ) {
     return res.sendStatus(400);
   }
 
   db.update(
-    { region: new RegExp('^' + regionUrl + '$', 'i'), year: yearUrl },
+    { region: regionUrl, year: yearUrl },
     body,
-    {}, // Opciones vacías
+    {}, 
     (err, numReplaced) => {
       if (numReplaced === 0) {
-        return res.sendStatus(404); // No existía el recurso a actualizar
+        return res.sendStatus(404); 
       }
       res.sendStatus(200);
     }
@@ -177,12 +174,13 @@ router.delete("/:region/:year", (req, res) => {
   const region = req.params.region;
   const year = Number(req.params.year);
 
-  db.remove({ region: new RegExp('^' + region + '$', 'i'), year: year }, {}, (err, numRemoved) => {
+  db.remove({ region: region, year: year }, {}, (err, numRemoved) => {
     if (numRemoved === 0) {
       return res.sendStatus(404);
     }
     res.sendStatus(200);
   });
 });
+
 
 export default router;
