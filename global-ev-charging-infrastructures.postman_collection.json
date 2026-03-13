@@ -17,11 +17,22 @@
             "exec": [
               "pm.test(\"Status code is 201\", function () {\r",
               "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response body is Created\", function () {\r",
+              "    pm.expect(pm.response.text()).to.eql(\"Created\");\r",
               "});"
             ],
             "type": "text/javascript",
             "packages": {},
             "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "packages": {},
+            "type": "text/javascript"
           }
         }
       ],
@@ -52,6 +63,10 @@
             "exec": [
               "pm.test(\"Status code is 409\", function () {\r",
               "    pm.response.to.have.status(409);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response body is Conflic\", function () {\r",
+              "    pm.expect(pm.response.text()).to.eql(\"Conflict\");\r",
               "});"
             ],
             "type": "text/javascript",
@@ -87,6 +102,11 @@
             "exec": [
               "pm.test(\"Status code is 200\", function () {\r",
               "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is an array\", function () {\r",
+              "    let data = pm.response.json();\r",
+              "    pm.expect(data).to.be.an(\"array\");\r",
               "});"
             ],
             "type": "text/javascript",
@@ -121,6 +141,18 @@
             "exec": [
               "pm.test(\"Status code is 200\", function () {\r",
               "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is an array\", function () {\r",
+              "    let data = pm.response.json();\r",
+              "    pm.expect(data).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"All countries are germany\", function () {\r",
+              "    let data = pm.response.json();\r",
+              "    data.forEach(item => {\r",
+              "        pm.expect(item.country).to.eql(\"germany\");\r",
+              "    });\r",
               "});"
             ],
             "type": "text/javascript",
@@ -161,6 +193,17 @@
             "exec": [
               "pm.test(\"Status code is 200\", function () {\r",
               "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is an object\", function () {\r",
+              "    let data = pm.response.json();\r",
+              "    pm.expect(data).to.be.an(\"object\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Correct country and year\", function () {\r",
+              "    let data = pm.response.json();\r",
+              "    pm.expect(data.country).to.eql(\"germany\");\r",
+              "    pm.expect(data.year).to.eql(2020);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -233,6 +276,10 @@
             "exec": [
               "pm.test(\"Status code is 201\", function () {\r",
               "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is acceptable\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -407,6 +454,10 @@
             "exec": [
               "pm.test(\"Status code is 200\", function () {\r",
               "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is acceptable\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -540,6 +591,10 @@
             "exec": [
               "pm.test(\"Status code is 200\", function () {\r",
               "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is acceptable\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -658,6 +713,16 @@
             "exec": [
               "pm.test(\"Status code is 200\", function () {\r",
               "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is an array\", function () {\r",
+              "    let data = pm.response.json();\r",
+              "    pm.expect(data).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Array is empty\", function () {\r",
+              "    let data = pm.response.json();\r",
+              "    pm.expect(data.length).to.eql(0);\r",
               "});"
             ],
             "type": "text/javascript",

@@ -18,8 +18,8 @@
     "start": "node index.js",
     "test": "npm run test-global-ev-charging-infrastructures && npm run test-global-ev-sales && npm run test-global-ev-stock-volumes",
     "test-global-ev-sales": "newman run ./global-ev-sales.postman_collection.json -e ./global-ev-sales-Local.postman_environment.json",
-      "test-global-ev-charging-infrastructures": "newman run ./global-ev-charging-infrastructures.postman_collection.json -e ./global-ev-charging-infrastructures-local.postman_environment.json",
-      "test-global-ev-stock-volumes": "newman run ./global-ev-stock-volumes.postman_collection.json -e ./global-ev-stock-volumes-Local.postman_environment.json"
+    "test-global-ev-charging-infrastructures": "newman run ./global-ev-charging-infrastructures.postman_collection.json -e ./global-ev-charging-infrastructures-local.postman_environment.json",
+    "test-global-ev-stock-volumes": "newman run ./global-ev-stock-volumes.postman_collection.json -e ./global-ev-stock-volumes-Local.postman_environment.json"
   },
   "dependencies": {
     "body-parser": "^2.2.2",
@@ -28,6 +28,6 @@
     "nedb": "^1.8.0"
   },
   "devDependencies": {
-    "newman": "^2.1.2"
+    "newman": "^6.2.2"
   }
 }
