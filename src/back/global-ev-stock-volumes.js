@@ -24,14 +24,14 @@ function evStockAPI(app) {
     //Load initialData
     app.get(BASE_URL_API + "/global-ev-stock-volumes/loadInitialData"), (req, res) => {
         db.count({}, (err, count) => {
-    if (count === 0) {
-      db.insert(initialData, () => {
-        res.sendStatus(201);
-      });
-    } else {
-      res.sendStatus(409);
-    }
-  });
+            if (count === 0) {
+                db.insert(initialData, () => {
+                    res.sendStatus(201);
+                });
+            } else {
+                res.sendStatus(409);
+            }
+        });
     }
 
     //Get colección
@@ -110,118 +110,118 @@ function evStockAPI(app) {
 
 
 
-//Get recurso
-app.get(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
-    const { region_country, year } = req.params;
+    //Get recurso
+    app.get(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
+        const { region_country, year } = req.params;
 
-    db.find({ region_country: region_country, year: Number(year) }, (err, registros) => {
-        if (err) {
-            res.sendStatus(500);
-        } else if (registros.length === 0) {
-            res.sendStatus(404, "NOT FOUND");
-        } else {
-            // Devolvemos el primer elemento encontrado (sin el _id de NeDB)
-            const result = registros[0];
-            delete result._id;
-            res.json(result);
-        }
-    });
-});
-
-
-//Post
-app.post(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
-    const newRegister = req.body;
-    //Comprobamos si tiene los atributos mínimos
-    if (
-        !newRegister.region_country ||
-        !newRegister.year ||
-        newRegister.ev_stock === undefined ||
-        newRegister.macroregion_stock === undefined ||
-        newRegister.worldwide_stock === undefined ||
-        newRegister.oil_world_displacement === undefined
-    ) {
-        return res.sendStatus(400);
-    }
-
-
-    db.find({ region_country: newRegister.region_country, year: newRegister.year }, (err, registros) => {
-        if (registros.length > 0) {
-            res.sendStatus(409);
-
-        } else {
-            db.insert(newRegister);
-            res.sendStatus(201);
-        }
-
-    })
-
-});
-
-//Post sobre dato. NO PERMITIDO
-app.post(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
-    res.sendStatus(405);
-});
-
-//Put 
-app.put(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
-    const register = req.body;
-    const { region_country, year } = req.params;
-    if (
-        !register.region_country ||
-        !register.year ||
-        register.region_country.toLowerCase() !== region_country ||
-        Number(register.year) !== year
-    ) {
-        return res.sendStatus(400);
-    }
-
-    delete body._id;
-
-    db.update({ region_country: register.region_country, year: register.year }, (err, updated) => {
-        if (updated === 0) {
-            return res.sendStatus(404);
-        } else {
-            res.sendStatus(200);
-        }
-    });
-
-});
-
-//PUT sobre la lista general.NO VÁLIDO
-app.put(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
-    res.sendStatus(405);
-});
-
-//Delete individual
-app.delete(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
-    const { region_country, year } = req.params;
-    //Comprobamos si existe ese registro
-    db.find({ region_country: region_country, year: year }, (err, registros) => {
-        if (registros.length === 0) {
-            res.sendStatus(404);
-        } else {
-            db.remove({ region_country: region_country, year: year }, (err, numRemoved) => {
-                if (err) {
-                    res.sendStatus(500);
-                } else {
-                    res.sendStatus(200);
-                }
+        db.find({ region_country: region_country, year: Number(year) }, (err, registros) => {
+            if (err) {
+                res.sendStatus(500);
+            } else if (registros.length === 0) {
+                res.sendStatus(404, "NOT FOUND");
+            } else {
+                // Devolvemos el primer elemento encontrado (sin el _id de NeDB)
+                const result = registros[0];
+                delete result._id;
+                res.json(result);
             }
-            );
+        });
+    });
+
+
+    //Post
+    app.post(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
+        const newRegister = req.body;
+        //Comprobamos si tiene los atributos mínimos
+        if (
+            !newRegister.region_country ||
+            !newRegister.year ||
+            newRegister.ev_stock === undefined ||
+            newRegister.macroregion_stock === undefined ||
+            newRegister.worldwide_stock === undefined ||
+            newRegister.oil_world_displacement === undefined
+        ) {
+            return res.sendStatus(400);
         }
+
+
+        db.find({ region_country: newRegister.region_country, year: newRegister.year }, (err, registros) => {
+            if (registros.length > 0) {
+                res.sendStatus(409);
+
+            } else {
+                db.insert(newRegister);
+                res.sendStatus(201);
+            }
+
+        })
+
     });
 
-});
-
-
-//Delete colección
-app.delete(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
-    db.remove({}, { multi: true }, () => {
-        res.sendStatus(200);
+    //Post sobre dato. NO PERMITIDO
+    app.post(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
+        res.sendStatus(405);
     });
 
-});
+    //Put 
+    app.put(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
+        const register = req.body;
+        const { region_country, year } = req.params;
+        if (
+            !register.region_country ||
+            !register.year ||
+            register.region_country.toLowerCase() !== region_country ||
+            Number(register.year) !== year
+        ) {
+            return res.sendStatus(400);
+        }
+
+        delete body._id;
+
+        db.update({ region_country: register.region_country, year: register.year }, (err, updated) => {
+            if (updated === 0) {
+                return res.sendStatus(404);
+            } else {
+                res.sendStatus(200);
+            }
+        });
+
+    });
+
+    //PUT sobre la lista general.NO VÁLIDO
+    app.put(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
+        res.sendStatus(405);
+    });
+
+    //Delete individual
+    app.delete(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
+        const { region_country, year } = req.params;
+        //Comprobamos si existe ese registro
+        db.find({ region_country: region_country, year: year }, (err, registros) => {
+            if (registros.length === 0) {
+                res.sendStatus(404);
+            } else {
+                db.remove({ region_country: region_country, year: year }, (err, numRemoved) => {
+                    if (err) {
+                        res.sendStatus(500);
+                    } else {
+                        res.sendStatus(200);
+                    }
+                }
+                );
+            }
+        });
+
+    });
+
+
+    //Delete colección
+    app.delete(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
+        db.remove({}, { multi: true }, () => {
+            res.sendStatus(200);
+        });
+
+    });
 
 }
 export { evStockAPI };
