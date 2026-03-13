@@ -5,7 +5,8 @@ import express from "express";
 import dataStore from 'nedb';
 
 // 1. Inicialización de la base de datos con persistencia
-const db = new dataStore({ filename: './db/global-ev-sales.db', autoload: true });
+//const db = new dataStore({ filename: './db/global-ev-sales.db', autoload: true });
+let db = new dataStore();
 const router = express.Router();
 
 // 2. Datos iniciales
