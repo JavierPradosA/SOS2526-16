@@ -7,6 +7,7 @@ let db = new dataStore();
 let BASE_URL_API = "/api/v1";
 
 function evStockAPI(app) {
+
     const initialData = [
         { region_country: "Brazil", year: 2024, ev_stock: 214003, macroregion_stock: 1884600, worldwide_stock: 50000000, oil_world_displacement: 58001 },
         { region_country: "Brazil", year: 2010, ev_stock: 0, macroregion_stock: 400, worldwide_stock: 20426, oil_world_displacement: 25 },
@@ -22,7 +23,7 @@ function evStockAPI(app) {
     ];
 
     //Load initialData
-    app.get(BASE_URL_API + "/global-ev-stock-volumes/loadInitialData"), (req, res) => {
+    app.get(BASE_URL_API + "/global-ev-stock-volumes/loadInitialData", (req, res) => {
         db.count({}, (err, count) => {
             if (count === 0) {
                 db.insert(initialData, () => {
@@ -32,10 +33,10 @@ function evStockAPI(app) {
                 res.sendStatus(409);
             }
         });
-    }
+    });
 
     //Get colección
-    app.get(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
+    app.get(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
 
         db.find({}, { _id: 0 }, (err, result) => {
 
@@ -166,7 +167,8 @@ function evStockAPI(app) {
     //Put 
     app.put(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
         const register = req.body;
-        const { region_country, year } = req.params;
+        const region_country = req.params.region_country.toLowerCase();
+        const year = Number(req.params.year);
         if (
             !register.region_country ||
             !register.year ||
@@ -176,7 +178,7 @@ function evStockAPI(app) {
             return res.sendStatus(400);
         }
 
-        delete body._id;
+        delete register._id;
 
         db.update({ region_country: register.region_country, year: register.year }, (err, updated) => {
             if (updated === 0) {
@@ -195,7 +197,8 @@ function evStockAPI(app) {
 
     //Delete individual
     app.delete(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
-        const { region_country, year } = req.params;
+        const region_country = req.params.region_country.toLowerCase();
+        const year = Number(req.params.year);
         //Comprobamos si existe ese registro
         db.find({ region_country: region_country, year: year }, (err, registros) => {
             if (registros.length === 0) {
