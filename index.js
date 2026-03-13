@@ -2,8 +2,6 @@
 import express from 'express'
 
 import path from 'path'
-//let bodyParser = require("body-parser");
-import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 
 //Import apis
@@ -19,7 +17,6 @@ let app = express();
 
 app.use(express.static("public"));
 app.use(express.json());
-app.use(bodyParser.json());
 
 
 app.use("/api/v1/global-ev-charging-infrastructures", evChargingInfrastructuresAPI());
