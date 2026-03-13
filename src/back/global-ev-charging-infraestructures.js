@@ -40,43 +40,21 @@ router.get("/", (req, res) => {
 
   db.find({}, { _id: 0 }, (err, result) => {
 
-    // FILTROS
+    // FILTROS STRING
     if (req.query.country) {
       result = result.filter(d =>
         d.country === req.query.country.toLowerCase()
       );
     }
 
+    // FILTRO EXACTO AÑO
     if (req.query.year) {
       result = result.filter(d =>
         d.year == Number(req.query.year)
       );
     }
 
-    if (req.query.charging_point) {
-      result = result.filter(d =>
-        d.charging_point == Number(req.query.charging_point)
-      );
-    }
-
-    if (req.query.ac_slow) {
-      result = result.filter(d =>
-        d.ac_slow == Number(req.query.ac_slow)
-      );
-    }
-
-    if (req.query.dc_fast) {
-      result = result.filter(d =>
-        d.dc_fast == Number(req.query.dc_fast)
-      );
-    }
-
-    if (req.query.total_power_kw) {
-      result = result.filter(d =>
-        d.total_power_kw == Number(req.query.total_power_kw)
-      );
-    }
-
+    // RANGO AÑO
     if (req.query.from) {
       result = result.filter(d =>
         d.year >= Number(req.query.from)
@@ -86,6 +64,86 @@ router.get("/", (req, res) => {
     if (req.query.to) {
       result = result.filter(d =>
         d.year <= Number(req.query.to)
+      );
+    }
+
+    // ===== charging_point =====
+
+    if (req.query.charging_point) {
+      result = result.filter(d =>
+        d.charging_point == Number(req.query.charging_point)
+      );
+    }
+
+    if (req.query.charging_point_gt) {
+      result = result.filter(d =>
+        d.charging_point > Number(req.query.charging_point_gt)
+      );
+    }
+
+    if (req.query.charging_point_lt) {
+      result = result.filter(d =>
+        d.charging_point < Number(req.query.charging_point_lt)
+      );
+    }
+
+    // ===== ac_slow =====
+
+    if (req.query.ac_slow) {
+      result = result.filter(d =>
+        d.ac_slow == Number(req.query.ac_slow)
+      );
+    }
+
+    if (req.query.ac_slow_gt) {
+      result = result.filter(d =>
+        d.ac_slow > Number(req.query.ac_slow_gt)
+      );
+    }
+
+    if (req.query.ac_slow_lt) {
+      result = result.filter(d =>
+        d.ac_slow < Number(req.query.ac_slow_lt)
+      );
+    }
+
+    // ===== dc_fast =====
+
+    if (req.query.dc_fast) {
+      result = result.filter(d =>
+        d.dc_fast == Number(req.query.dc_fast)
+      );
+    }
+
+    if (req.query.dc_fast_gt) {
+      result = result.filter(d =>
+        d.dc_fast > Number(req.query.dc_fast_gt)
+      );
+    }
+
+    if (req.query.dc_fast_lt) {
+      result = result.filter(d =>
+        d.dc_fast < Number(req.query.dc_fast_lt)
+      );
+    }
+
+    // ===== total_power_kw =====
+
+    if (req.query.total_power_kw) {
+      result = result.filter(d =>
+        d.total_power_kw == Number(req.query.total_power_kw)
+      );
+    }
+
+    if (req.query.total_power_kw_gt) {
+      result = result.filter(d =>
+        d.total_power_kw > Number(req.query.total_power_kw_gt)
+      );
+    }
+
+    if (req.query.total_power_kw_lt) {
+      result = result.filter(d =>
+        d.total_power_kw < Number(req.query.total_power_kw_lt)
       );
     }
 
@@ -103,7 +161,6 @@ router.get("/", (req, res) => {
 
     res.json(result);
   });
-
 
 });
 
@@ -186,7 +243,7 @@ router.put("/:country/:year", (req, res) => {
   }
 
   delete body._id;
-  
+
   db.update(
     { country: country, year: year },
     body,
