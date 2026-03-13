@@ -9,6 +9,8 @@ import { fileURLToPath } from 'url';
 //Import apis
 import chargingAPI from "./src/back/global-ev-charging-infraestructures.js";
 import salesAPI from "./src/back/global-ev-sales.js";
+import  evStockAPI  from './src/back/global-ev-stock-volumes.js';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
