@@ -22,7 +22,17 @@ function evStockAPI(app) {
     ];
 
     //Load initialData
-
+    app.get(BASE_URL_API + "/global-ev-stock-volumes/loadInitialData"), (req, res) => {
+        db.count({}, (err, count) => {
+    if (count === 0) {
+      db.insert(initialData, () => {
+        res.sendStatus(201);
+      });
+    } else {
+      res.sendStatus(409);
+    }
+  });
+    }
 
     //Get colección
     app.get(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
