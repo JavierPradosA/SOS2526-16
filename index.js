@@ -7,9 +7,9 @@ import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 
 //Import apis
-import chargingAPI from "./src/back/global-ev-charging-infraestructures.js";
+import {evChargingInfrastructuresAPI} from "./src/back/global-ev-charging-infraestructures.js";
 import salesAPI from "./src/back/global-ev-sales.js";
-import evStockAPI  from './src/back/global-ev-stock-volumes.js';
+import {evStockAPI}  from "./src/back/global-ev-stock-volumes.js";
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,9 +22,13 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 
-app.use("/api/v1/global-ev-charging-infrastructures", chargingAPI);
+app.use("/api/v1/global-ev-charging-infrastructures", evChargingInfrastructuresAPI());
 app.use("/api/v1/global-ev-sales", salesAPI);
-app.use("/api/v1/global-ev-stock-volumes", evStockAPI);
+app.use("/api/v1/global-ev-stock-volumes", evStockAPI());
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "about.html"));
