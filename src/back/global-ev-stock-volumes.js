@@ -5,6 +5,7 @@ let db = new dataStore();
 
 //Buena Práctica: URL Base
 let BASE_URL_API = "/api/v1";
+let DOCS_URL = "https://documenter.getpostman.com/view/52409063/2sBXigLtC2";
 
 function evStockAPI(app) {
 
@@ -224,6 +225,12 @@ function evStockAPI(app) {
             res.sendStatus(200);
         });
 
+    });
+
+
+    //Portal de documentación de la API
+    app.get(BASE_URL_API + "/global-ev-stock-volumes/docs", (req, res) => {
+        res.redirect(DOCS_URL);
     });
 
 }
