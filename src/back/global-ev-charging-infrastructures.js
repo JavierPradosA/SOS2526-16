@@ -1,11 +1,10 @@
-import express from "express";
+
 import dataStore from 'nedb';
 
 let db = new dataStore();
+const BASE_URL_API = "/api/v1/global-ev-charging-infrastructures";
 
-function evChargingInfrastructuresAPI() {
-
-  const router = express.Router();
+function evChargingInfrastructuresAPI(app) {
 
   // Datos iniciales
   const initialData = [
@@ -22,7 +21,7 @@ function evChargingInfrastructuresAPI() {
   ];
 
   // LOAD INITIAL DATA
-  router.get("/loadInitialData", (req, res) => {
+  app.get(BASE_URL_API + "/loadInitialData", (req, res) => {
 
     db.count({}, (err, count) => {
       if (count === 0) {
@@ -36,7 +35,7 @@ function evChargingInfrastructuresAPI() {
   });
 
   // GET COLECCIÓN
-  router.get("/", (req, res) => {
+  app.get(BASE_URL_API + "/", (req, res) => {
 
     db.find({}, { _id: 0 }, (err, result) => {
 
@@ -161,7 +160,7 @@ function evChargingInfrastructuresAPI() {
   });
 
   // GET RECURSO
-  router.get("/:country/:year", (req, res) => {
+  app.get(BASE_URL_API + "/:country/:year", (req, res) => {
 
     const country = req.params.country.toLowerCase();
     const year = Number(req.params.year);
@@ -181,7 +180,7 @@ function evChargingInfrastructuresAPI() {
   });
 
   // POST
-  router.post("/", (req, res) => {
+  app.post(BASE_URL_API + "/", (req, res) => {
 
     const newItem = req.body;
 
@@ -218,12 +217,12 @@ function evChargingInfrastructuresAPI() {
   });
 
   // POST NO PERMITIDO
-  router.post("/:country/:year", (req, res) => {
+  app.post(BASE_URL_API + "/:country/:year", (req, res) => {
     res.sendStatus(405);
   });
 
   // PUT
-  router.put("/:country/:year", (req, res) => {
+  app.put(BASE_URL_API + "/:country/:year", (req, res) => {
 
     const country = req.params.country.toLowerCase();
     const year = Number(req.params.year);
@@ -257,12 +256,12 @@ function evChargingInfrastructuresAPI() {
   });
 
   // PUT NO PERMITIDO
-  router.put("/", (req, res) => {
+  app.put(BASE_URL_API + "/", (req, res) => {
     res.sendStatus(405);
   });
 
   // DELETE COLECCIÓN
-  router.delete("/", (req, res) => {
+  app.delete(BASE_URL_API + "/", (req, res) => {
 
     db.remove({}, { multi: true }, () => {
 
@@ -273,7 +272,7 @@ function evChargingInfrastructuresAPI() {
   });
 
   // DELETE RECURSO
-  router.delete("/:country/:year", (req, res) => {
+  app.delete(BASE_URL_API + "/:country/:year", (req, res) => {
 
     const country = req.params.country.toLowerCase();
     const year = Number(req.params.year);
@@ -295,13 +294,11 @@ function evChargingInfrastructuresAPI() {
   });
 
   // DOCS
-  router.get("/docs", (req, res) => {
+  app.get(BASE_URL_API + "/docs", (req, res) => {
 
     res.redirect("https://documenter.getpostman.com/view/52367690/2sBXigLt7Z");
 
   });
-
-  return router;
 }
 
 export { evChargingInfrastructuresAPI };
