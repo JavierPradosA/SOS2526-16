@@ -37,48 +37,26 @@ function evStockAPI(app) {
     });
 
     //Get colección
-    app.get(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
+    app.get(BASE_URL_API + "/global-ev-stock-volumes/", (req, res) => {
 
         db.find({}, { _id: 0 }, (err, result) => {
 
             // FILTROS
+            // FILTROS STRING
             if (req.query.region_country) {
                 result = result.filter(d =>
                     d.region_country === req.query.region_country.toLowerCase()
                 );
             }
 
+            // FILTRO EXACTO AÑO
             if (req.query.year) {
                 result = result.filter(d =>
                     d.year == Number(req.query.year)
                 );
             }
 
-            if (req.query.ev_stock) {
-                result = result.filter(d =>
-                    d.ev_stock == Number(req.query.ev_stock)
-                );
-            };
-
-
-            if (req.query.macroregion_stock) {
-                result = result.filter(d =>
-                    d.macroregion_stock == Number(req.query.macroregion_stock)
-                );
-            }
-
-            if (req.query.worldwide_stock) {
-                result = result.filter(d =>
-                    d.worldwide_stock == Number(req.query.worldwide_stock)
-                );
-            }
-
-            if (req.query.oil_world_displacement) {
-                result = result.filter(d =>
-                    d.oil_world_displacement == Number(req.oil_world_displacement)
-                );
-            }
-
+            // RANGO AÑO
             if (req.query.from) {
                 result = result.filter(d =>
                     d.year >= Number(req.query.from)
@@ -88,6 +66,82 @@ function evStockAPI(app) {
             if (req.query.to) {
                 result = result.filter(d =>
                     d.year <= Number(req.query.to)
+                );
+            }
+
+            // ===== ev_stock =====
+            if (req.query.ev_stock) {
+                result = result.filter(d =>
+                    d.ev_stock == Number(req.query.ev_stock)
+                );
+            }
+
+            if (req.query.ev_stock_bt) {
+                result = result.filter(d =>
+                    d.ev_stock > Number(req.query.ev_stock_bt)
+                );
+            }
+
+            if (req.query.ev_stock_lt) {
+                result = result.filter(d =>
+                    d.ev_stock < Number(req.query.ev_stock_lt)
+                );
+            }
+
+            // ===== macroregion_stock =====
+            if (req.query.macroregion_stock) {
+                result = result.filter(d =>
+                    d.macroregion_stock == Number(req.query.macroregion_stock)
+                );
+            }
+
+            if (req.query.macroregion_stock_gt) {
+                result = result.filter(d =>
+                    d.macroregion_stock > Number(req.query.macroregion_stock_gt)
+                );
+            }
+
+            if (req.query.macroregion_stock_lt) {
+                result = result.filter(d =>
+                    d.macroregion_stock < Number(req.query.macroregion_stock_lt)
+                );
+            }
+
+            // ===== worldwide_stock =====
+            if (req.query.worldwide_stock) {
+                result = result.filter(d =>
+                    d.worldwide_stock == Number(req.query.worldwide_stock)
+                );
+            }
+
+            if (req.query.worldwide_stock_gt) {
+                result = result.filter(d =>
+                    d.worldwide_stock > Number(req.query.worldwide_stock_gt)
+                );
+            }
+
+            if (req.query.worldwide_stock_lt) {
+                result = result.filter(d =>
+                    d.worldwide_stock < Number(req.query.worldwide_stock_lt)
+                );
+            }
+
+            // ===== oil_world_displacement =====
+            if (req.query.oil_world_displacement) {
+                result = result.filter(d =>
+                    d.oil_world_displacement == Number(req.query.oil_world_displacement)
+                );
+            }
+
+            if (req.query.oil_world_displacement_gt) {
+                result = result.filter(d =>
+                    d.oil_world_displacement > Number(req.query.oil_world_displacement_gt)
+                );
+            }
+
+            if (req.query.oil_world_displacement_lt) {
+                result = result.filter(d =>
+                    d.oil_world_displacement < Number(req.query.oil_world_displacement_lt)
                 );
             }
 
@@ -182,7 +236,7 @@ function evStockAPI(app) {
 
         delete register._id;
 
-        db.update({ region_country: register.region_country, year: register.year },register, {}, (err, updated) => {
+        db.update({ region_country: register.region_country, year: register.year }, register, {}, (err, updated) => {
             if (updated === 0) {
                 return res.sendStatus(404);
             } else {
@@ -206,7 +260,7 @@ function evStockAPI(app) {
             if (registros.length === 0) {
                 res.sendStatus(404);
             } else {
-                db.remove({ region_country: region_country, year: year },{}, (err, numRemoved) => {
+                db.remove({ region_country: region_country, year: year }, {}, (err, numRemoved) => {
                     if (err) {
                         res.sendStatus(500);
                     } else {
