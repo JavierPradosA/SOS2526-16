@@ -9,13 +9,10 @@ import {evChargingInfrastructuresAPI} from "./src/back/global-ev-charging-infrae
 import salesAPI from "./src/back/global-ev-sales.js";
 import { evStockAPI } from './src/back/global-ev-stock-volumes.js';
 
-
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let app = express();
-
 
 app.use(express.static("public"));
 app.use(express.json());

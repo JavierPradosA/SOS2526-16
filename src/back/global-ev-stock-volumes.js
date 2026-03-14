@@ -180,7 +180,7 @@ function evStockAPI(app) {
 
         delete register._id;
 
-        db.update({ region_country: register.region_country, year: register.year }, (err, updated) => {
+        db.update({ region_country: register.region_country, year: register.year },register, {}, (err, updated) => {
             if (updated === 0) {
                 return res.sendStatus(404);
             } else {
@@ -197,14 +197,14 @@ function evStockAPI(app) {
 
     //Delete individual
     app.delete(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
-        const region_country = req.params.region_country.toLowerCase();
+        const region_country = req.params.region_country;
         const year = Number(req.params.year);
         //Comprobamos si existe ese registro
         db.find({ region_country: region_country, year: year }, (err, registros) => {
             if (registros.length === 0) {
                 res.sendStatus(404);
             } else {
-                db.remove({ region_country: region_country, year: year }, (err, numRemoved) => {
+                db.remove({ region_country: region_country, year: year },{}, (err, numRemoved) => {
                     if (err) {
                         res.sendStatus(500);
                     } else {
