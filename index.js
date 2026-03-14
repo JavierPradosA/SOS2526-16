@@ -5,7 +5,7 @@ import path from 'path'
 import { fileURLToPath } from 'url';
 
 //Import apis
-import {evChargingInfrastructuresAPI} from "./src/back/global-ev-charging-infraestructures.js";
+import {evChargingInfrastructuresAPI} from "./src/back/global-ev-charging-infrastructures.js";
 import salesAPI from "./src/back/global-ev-sales.js";
 import { evStockAPI } from './src/back/global-ev-stock-volumes.js';
 
@@ -18,7 +18,7 @@ app.use(express.static("public"));
 app.use(express.json());
 
 
-app.use("/api/v1/global-ev-charging-infrastructures", evChargingInfrastructuresAPI());
+evChargingInfrastructuresAPI(app);
 app.use("/api/v1/global-ev-sales", salesAPI);
 evStockAPI(app);
 
