@@ -1,0 +1,405 @@
+{
+  "info": {
+    "_postman_id": "0a18bd97-60f7-4f36-af3c-9759720575a4",
+    "name": "PRUEBAS-F06",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52409063"
+  },
+  "item": [
+    {
+      "name": "GET loadInitialData 201",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes/loadInitialData",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes",
+            "loadInitialData"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET loadInitialData 409",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes/loadInitialData",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes",
+            "loadInitialData"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET coleccion 200",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET querys",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-charging-infrastructures?country=brazil",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-charging-infrastructures"
+          ],
+          "query": [
+            {
+              "key": "country",
+              "value": "brazil"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET elemento 200",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes/Brazil/2024",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes",
+            "Brazil",
+            "2024"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET elemento 404",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-charging-infrastructures/Spain/2020",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-charging-infrastructures",
+            "Spain",
+            "2020"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST 201",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"region_country\": \"Spain\",\r\n    \"year\": 2026,\r\n    \"ev_stock\": 155000,\r\n    \"macroregion_stock\": 2100000,\r\n    \"worldwide_stock\": 65000000,\r\n    \"oil_world_displacement\": 48000\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST 409",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"region_country\": \"Spain\",\r\n    \"year\": 2026,\r\n    \"ev_stock\": 155000,\r\n    \"macroregion_stock\": 2100000,\r\n    \"worldwide_stock\": 65000000,\r\n    \"oil_world_displacement\": 48000\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST 400",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"region_country\": \"Spain\",\r\n    \"ev_stock\": 155000,\r\n    \"macroregion_stock\": 2100000,\r\n    \"worldwide_stock\": 65000000,\r\n    \"oil_world_displacement\": 48000\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST 405",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"region_country\": \"Spain\",\r\n    \"year\": 2025,\r\n    \"ev_stock\": 155000,\r\n    \"macroregion_stock\": 2100000,\r\n    \"worldwide_stock\": 65000000,\r\n    \"oil_world_displacement\": 48000\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes/Spain/2025",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes",
+            "Spain",
+            "2025"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT 200",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n        \"region_country\": \"Brazil\",\r\n        \"year\": 2024,\r\n        \"ev_stock\": 0,\r\n        \"macroregion_stock\": 0,\r\n        \"worldwide_stock\": 0,\r\n        \"oil_world_displacement\": 0\r\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes/Brazil/2024",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes",
+            "Brazil",
+            "2024"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT 400",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"region_country\": \"Spain\",\r\n    \"year\": 2026,\r\n    \"ev_stock\": 155000,\r\n    \"macroregion_stock\": 2100000,\r\n    \"worldwide_stock\": 65000000,\r\n    \"oil_world_displacement\": 48000\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes/Brazil/2024",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes",
+            "Brazil",
+            "2024"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT 405",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"region_country\": \"Spain\",\r\n    \"year\": 2026,\r\n    \"ev_stock\": 155000,\r\n    \"macroregion_stock\": 2100000,\r\n    \"worldwide_stock\": 65000000,\r\n    \"oil_world_displacement\": 48000\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes/Spain/2026",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes",
+            "Spain",
+            "2026"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE 200",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n        \"region_country\": \"Brazil\",\r\n        \"year\": 2024,\r\n        \"ev_stock\": 0,\r\n        \"macroregion_stock\": 0,\r\n        \"worldwide_stock\": 0,\r\n        \"oil_world_displacement\": 0\r\n    }"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes/Brazil/2024",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes",
+            "Brazil",
+            "2024"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE 404",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes/Brazil/2026",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes",
+            "Brazil",
+            "2026"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE 200 coleccion",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-stock-volumes",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-stock-volumes"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+	"id": "036233cd-8b8c-4a99-bdd5-2ebeab872785",
+	"name": "Render",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2026-03-14T01:23:02.251Z",
+	"_postman_exported_using": "Postman/12.1.4-260313-0232"
+}
