@@ -152,6 +152,7 @@ function evStockAPI(app) {
                 res.sendStatus(409);
 
             } else {
+                delete newRegister._id;
                 db.insert(newRegister);
                 res.sendStatus(201);
             }
