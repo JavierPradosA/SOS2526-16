@@ -17,9 +17,9 @@
   "scripts": {
     "start": "node index.js",
     "test": "npm run test-global-ev-charging-infrastructures && npm run test-global-ev-sales && npm run test-global-ev-stock-volumes",
-    "test-global-ev-sales": "newman run ./api-test-IMM.json -e ./api-test-env-local.json",
-    "test-global-ev-charging-infrastructures": "newman run ./api-test-JPA.json -e ./api-test-env-local.json",
-    "test-global-ev-stock-volumes": "newman run ./api-test-ARH.json -e ./api-test-env-local.json"
+    "test-global-ev-sales": "newman run ./tests/api/api-test-IMM.json -e ./tests/api/api-test-env-local.json",
+    "test-global-ev-charging-infrastructures": "newman run ./tests/api/api-test-JPA.json -e ./tests/api/api-test-env-local.json",
+    "test-global-ev-stock-volumes": "newman run ./tests/api/api-test-ARH.json -e ./tests/api/api-test-env-local.json"
   },
   "dependencies": {
     "body-parser": "^2.2.2",
