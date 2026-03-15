@@ -16,7 +16,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "npm run test-global-ev-charging-infrastructures && npm run test-global-ev-sales && npm run test-global-ev-stock-volumes",
+    "test": "start-server-and-test start http://localhost:3000 test-apis-local",
+    "test-apis-local": "npm run test-global-ev-charging-infrastructures && npm run test-global-ev-sales && npm run test-global-ev-stock-volumes",
     "test-global-ev-sales": "newman run ./tests/api/api-test-IMM.json -e ./tests/api/api-test-env-local.json",
     "test-global-ev-charging-infrastructures": "newman run ./tests/api/api-test-JPA.json -e ./tests/api/api-test-env-local.json",
     "test-global-ev-stock-volumes": "newman run ./tests/api/api-test-ARH.json -e ./tests/api/api-test-env-local.json"
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "newman": "^6.2.2",
+    "start-server-and-test": "^2.1.5",
     "wait-on": "^9.0.4"
   }
 }
