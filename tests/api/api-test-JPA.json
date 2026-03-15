@@ -9,6 +9,50 @@
   },
   "item": [
     {
+      "name": "GET vacio 200",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is an array\", function () {\r",
+              "    let data = pm.response.json();\r",
+              "    pm.expect(data).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Array is empty\", function () {\r",
+              "    let data = pm.response.json();\r",
+              "    pm.expect(data.length).to.eql(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/global-ev-charging-infrastructures",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "global-ev-charging-infrastructures"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "GET Initial DATA 201",
       "event": [
         {
