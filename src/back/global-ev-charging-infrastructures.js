@@ -1,5 +1,5 @@
 
-import dataStore from 'nedb';
+import dataStore from 'nedb'; 
 
 let db = new dataStore();
 const BASE_URL_API = "/api/v1/global-ev-charging-infrastructures";
