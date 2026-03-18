@@ -9,7 +9,7 @@ import {evChargingInfrastructuresAPI} from "./src/back/global-ev-charging-infras
 import salesAPI from "./src/back/global-ev-sales.js";
 import { evStockAPI } from './src/back/global-ev-stock-volumes.js';
 import cors from 'cors';
-import handler from './src/front/build/handler.js';
+import {handler} from './src/front/build/handler.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
