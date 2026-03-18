@@ -25,6 +25,7 @@
   "dependencies": {
     "body-parser": "^2.2.2",
     "cool-ascii-faces": "^1.3.4",
+    "cors": "^2.8.6",
     "express": "^5.2.1",
     "nedb": "^1.8.0",
     "npx": "^10.2.2"
