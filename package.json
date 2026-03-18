@@ -23,6 +23,7 @@
     "test-global-ev-stock-volumes": "newman run ./tests/api/api-test-ARH.json -e ./tests/api/api-test-env-local.json"
   },
   "dependencies": {
+    "@sveltejs/adapter-node": "^5.5.4",
     "body-parser": "^2.2.2",
     "cool-ascii-faces": "^1.3.4",
     "cors": "^2.8.6",
