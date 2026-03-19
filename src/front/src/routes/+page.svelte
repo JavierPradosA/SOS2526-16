@@ -1,6 +1,6 @@
 <script>
-	import Info from "./Info.svelte";
+	import About from "./About.svelte";
 
 </script>
 
-<Info></Info>
+<About></About>
