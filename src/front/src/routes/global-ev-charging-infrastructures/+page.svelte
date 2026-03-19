@@ -1,1 +1,1 @@
-<h1>This Page is for Javi's front</h1>
+<h3>This Page is for Javi's front</h3>

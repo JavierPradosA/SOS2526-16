@@ -16,7 +16,7 @@
 <h2>Frontends</h2>
 <ul>
   <li>
-    <a href="">
+    <a href="./global-ev-charging-infrastructures">
       Frontend Javier
     </a>
   </li>
