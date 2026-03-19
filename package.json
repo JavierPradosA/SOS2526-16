@@ -16,7 +16,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build-front && node index.js",
-    "build-front": "cd src/front && npm install && npm run build",
+    "build-front": "cd src/front && npm install --include=dev && npm run build",
     "dev-front": "cd src/front && npm run dev -- --open",
     "test": "start-server-and-test start http://localhost:3000 test-apis-local",
     "test-apis-local": "npm run test-global-ev-charging-infrastructures && npm run test-global-ev-sales && npm run test-global-ev-stock-volumes",
