@@ -1,6 +1,7 @@
 <script>
 	// @ts-ignore
     //Alamacenamiento de datos
+	import {dev} from '$app/environment'
     let pais = $state("");
 	let year = $state("");
 	let charging_point = $state("");
@@ -9,11 +10,19 @@
 	let total_power_kw = $state("");
 	let data = $state([]);
 	let mensaje = $state("");
+
+	let API = "/api/v1/global-ev-charging-infrastructures";
+
+	if (import.meta.env.DEV) {
+		API = "http://localhost:3000" + API;
+	} else {
+		API = "https://sos2526-16.onrender.com" + API;
+	}
     
     //Async pq no sabemos cuando nos va a dar el resultado
 	async function getData() {
         //
-		const res = await fetch('http://localhost:3000/api/v1/global-ev-charging-infrastructures/', {
+		const res = await fetch(API, {
 			method: 'GET'
 		});
 		const d = await res.json();
@@ -21,7 +30,7 @@
 	}
     async function LoadData() {
         //
-		await fetch('http://localhost:3000/api/v1/global-ev-charging-infrastructures/loadInitialData', {
+		await fetch(API + 'loadInitialData', {
 			method: 'GET'
 		});
         mensaje = "Datos cargados"
@@ -31,7 +40,7 @@
 	//Borrado de colección
     async function borrarColeccion() {
         //
-		await fetch('http://localhost:3000/api/v1/global-ev-charging-infrastructures/', {
+		await fetch(API, {
 			method: 'DELETE'
 		});
         mensaje = "Datos Borrados";
@@ -40,7 +49,7 @@
 
 	//Funcion de borrado de un elemento por su id
     async function borrarElemento(pais, year) {
-		await fetch(`http://localhost:3000/api/v1/global-ev-charging-infrastructures/${pais}/${year}`, {
+		await fetch(API + `${pais}/${year}`, {
 			method: 'DELETE'
 		});
 
@@ -51,7 +60,7 @@
 	//Funcion para crear un elemento
 	async function crearElemento() {
 	
-		const res = await fetch("http://localhost:3000/api/v1/global-ev-charging-infrastructures", {
+		const res = await fetch(API, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -80,7 +89,7 @@
 
 	}
 	async function actualizarElemento() {
-		const res = await fetch(`http://localhost:3000/api/v1/global-ev-charging-infrastructures/${pais}/${year}`, {
+		const res = await fetch(API + `${pais}/${year}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
