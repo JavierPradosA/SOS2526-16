@@ -192,49 +192,49 @@ Crear elemento
 
 <form onsubmit={actualizarElemento}>
 
-	<input
+	<input style="border-radius: 10px;"
 		type="text"
 		placeholder="País"
 		bind:value={pais}
 		readonly
 	/>
 
-	<input
+	<input style="border-radius: 10px;"
 		type="number"
 		placeholder="Año"
 		bind:value={year}
 		readonly
 	/>
 
-	<input
+	<input style="border-radius: 10px;"
 		type="number"
 		placeholder="Charging Points"
 		bind:value={charging_point}
 		required
 	/>
 
-	<input
+	<input style="border-radius: 10px;"
 		type="number"
 		placeholder="AC Slow"
 		bind:value={ac_slow}
 		required
 	/>
 
-	<input
+	<input style="border-radius: 10px;"
 		type="number"
 		placeholder="DC Fast"
 		bind:value={dc_fast}
 		required
 	/>
 
-	<input
+	<input style="border-radius: 10px;"
 		type="number"
 		placeholder="Total Power kW"
 		bind:value={total_power_kw}
 		required
 	/>
 
-	<button type="submit">Actualizar</button>
+	<button style="border-radius: 10px; background-color: green;" type="submit">Actualizar</button>
 
 </form>
 
