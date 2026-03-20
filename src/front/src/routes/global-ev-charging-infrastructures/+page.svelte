@@ -7,11 +7,9 @@
 	let ac_slow = "";
 	let dc_fast = "";
 	let total_power_kw = "";
-	let data = $state([]);
+    let data = $state([]);
     let mensaje = $state("");
-    let mensaje2 = $state("");
-	let mensaje3 = $state("");
-
+    
     //Async pq no sabemos cuando nos va a dar el resultado
 	async function getData() {
         //
@@ -36,7 +34,7 @@
 		await fetch('http://localhost:3000/api/v1/global-ev-charging-infrastructures/', {
 			method: 'DELETE'
 		});
-        mensaje2 = "Datos Borrados";
+        mensaje = "Datos Borrados";
 	
 	}
 
@@ -47,7 +45,7 @@
 			method: 'DELETE'
 		});
 
-		mensaje2 = "Datos Borrados";
+		mensaje = "Datos Borrados";
 
 	} catch (err) {
 		console.error("Error borrando:", err);
@@ -75,18 +73,18 @@
 
 		//Manejo de respuestas
 		if (res.status === 201) {
-			mensaje3 = "Elemento creado correctamente";
+			mensaje = "Elemento creado correctamente";
 		} else if (res.status === 400) {
-			mensaje3 = "Datos incompletos o inválidos";
+			mensaje = "Datos incompletos o inválidos";
 		} else if (res.status === 409) {
-			mensaje3 = "El elemento ya existe";
+			mensaje = "El elemento ya existe";
 		} else {
-			mensaje3 = "Error inesperado";
+			mensaje = "Error inesperado";
 		}
 
 	} catch (err) {
 		console.error("Error en POST:", err);
-		mensaje3 = "Error de conexión con el servidor";
+		mensaje = "Error de conexión con el servidor";
 	}
 }
 </script>
@@ -94,7 +92,6 @@
 <h3>This Page is for Javi's front</h3>
 <br />
 <button style="border-radius: 10px; background-color: aquamarine;" onclick={LoadData}>Cargar Datos</button>
-{mensaje}
 <br />
 <br />
 <button style="border-radius: 10px; background-color: cornflowerblue;" onclick={getData}>Obtener datos</button>
@@ -104,11 +101,8 @@
 	{/each}
 </ul>
 <button style="border-radius: 10px; background-color: red;" onclick={borrarColeccion}>Borrar datos</button>
-{mensaje2}
-
 <br>
 <br>
-
 Borrar colección
 <form onsubmit={() => borrarElemento(pais, year)}>
 	<input style="border-radius: 10px;" type="text" placeholder="País" bind:value={pais} required />
@@ -136,4 +130,6 @@ Crear elemento
 
 	<button style="border-radius: 10px; background-color: green;" type="submit">Crear</button>
 </form>
-{mensaje3}
+
+<p>Estado de la operación:</p>
+{mensaje}
