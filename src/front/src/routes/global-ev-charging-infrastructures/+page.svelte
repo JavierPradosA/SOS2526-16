@@ -1,13 +1,23 @@
 <script>
-	// @ts-ignore
-    //Alamacenamiento de datos
-	import {dev} from '$app/environment'
-    let pais = $state("");
-	let year = $state("");
-	let charging_point = $state("");
-	let ac_slow = $state("");
-	let dc_fast = $state("");
-	let total_power_kw = $state("");
+	import { dev } from '$app/environment';
+
+	// 🔹 CREAR
+	let pais_crear = $state("");
+	let year_crear = $state("");
+	let charging_point_crear = $state("");
+	let ac_slow_crear = $state("");
+	let dc_fast_crear = $state("");
+	let total_power_kw_crear = $state("");
+
+	// 🔹 EDITAR
+	let pais_editar = $state("");
+	let year_editar = $state("");
+	let charging_point_editar = $state("");
+	let ac_slow_editar = $state("");
+	let dc_fast_editar = $state("");
+	let total_power_kw_editar = $state("");
+
+	// 🔹 GENERAL
 	let data = $state([]);
 	let mensaje = $state("");
 
@@ -18,111 +28,81 @@
 	} else {
 		API = "https://sos2526-16.onrender.com" + API;
 	}
-    
-    //Async pq no sabemos cuando nos va a dar el resultado
+
+	// GET
 	async function getData() {
-        //
-		const res = await fetch(API, {
-			method: 'GET'
-		});
-		const d = await res.json();
-		data = d;
-	}
-    async function LoadData() {
-        //
-		await fetch(API + 'loadInitialData', {
-			method: 'GET'
-		});
-        mensaje = "Datos cargados"
-	
+		const res = await fetch(API);
+		data = await res.json();
 	}
 
-	//Borrado de colección
-    async function borrarColeccion() {
-        //
-		await fetch(API, {
-			method: 'DELETE'
-		});
-        mensaje = "Datos Borrados";
-	
+	// LOAD INITIAL DATA
+	async function LoadData() {
+		await fetch(API + 'loadInitialData');
+		mensaje = "Datos cargados";
 	}
 
-	//Funcion de borrado de un elemento por su id
-    async function borrarElemento(pais, year) {
-		await fetch(API + `${pais}/${year}`, {
-			method: 'DELETE'
-		});
-
-		mensaje = "Datos Borrados";
-
+	// DELETE ALL
+	async function borrarColeccion() {
+		await fetch(API, { method: 'DELETE' });
+		mensaje = "Datos borrados";
 	}
 
-	//Funcion para crear un elemento
+	// DELETE ONE
+	async function borrarElemento(pais, year) {
+		await fetch(API + `${pais}/${year}`, { method: 'DELETE' });
+		mensaje = "Elemento borrado";
+	}
+
+	// POST
 	async function crearElemento() {
-	
 		const res = await fetch(API, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			//body a recibir
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
-				country: pais,
-				year: Number(year),
-				charging_point: Number(charging_point),
-				ac_slow: Number(ac_slow),
-				dc_fast: Number(dc_fast),
-				total_power_kw: Number(total_power_kw)
+				country: pais_crear,
+				year: Number(year_crear),
+				charging_point: Number(charging_point_crear),
+				ac_slow: Number(ac_slow_crear),
+				dc_fast: Number(dc_fast_crear),
+				total_power_kw: Number(total_power_kw_crear)
 			})
 		});
 
-		//Manejo de respuestas
-		if (res.status === 201) {
-			mensaje = "Elemento creado correctamente";
-		} else if (res.status === 400) {
-			mensaje = "Datos incompletos o inválidos";
-		} else if (res.status === 409) {
-			mensaje = "El elemento ya existe";
-		} else {
-			mensaje = "Error inesperado";
-		}
-
+		mensaje = res.status === 201 ? "Elemento creado" : "Error creando";
 	}
+
+	// PUT
 	async function actualizarElemento() {
-		const res = await fetch(API + `${pais}/${year}`, {
+		const res = await fetch(API + `${pais_editar}/${year_editar}`, {
 			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json'
-			},
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
-				country: pais,
-				year: Number(year),
-				charging_point: Number(charging_point),
-				ac_slow: Number(ac_slow),
-				dc_fast: Number(dc_fast),
-				total_power_kw: Number(total_power_kw)
+				country: pais_editar,
+				year: Number(year_editar),
+				charging_point: Number(charging_point_editar),
+				ac_slow: Number(ac_slow_editar),
+				dc_fast: Number(dc_fast_editar),
+				total_power_kw: Number(total_power_kw_editar)
 			})
 		});
 
 		if (res.status === 200) {
 			mensaje = "Elemento actualizado";
-			await getData(); // refresca tabla
-		} else if (res.status === 400) {
-			mensaje = "Datos incorrectos";
-		} else if (res.status === 404) {
-			mensaje = "Elemento no encontrado";
+			await getData();
 		} else {
-			mensaje = "Error inesperado";
+			mensaje = "Error al actualizar";
 		}
-}
-function cargarFormulario(dato) {
-	pais = dato.country;
-	year = dato.year;
-	charging_point = dato.charging_point;
-	ac_slow = dato.ac_slow;
-	dc_fast = dato.dc_fast;
-	total_power_kw = dato.total_power_kw;
-}
+	}
+
+	// CARGAR DATOS EN FORM EDITAR
+	function cargarFormulario(dato) {
+		pais_editar = dato.country;
+		year_editar = dato.year;
+		charging_point_editar = dato.charging_point;
+		ac_slow_editar = dato.ac_slow;
+		dc_fast_editar = dato.dc_fast;
+		total_power_kw_editar = dato.total_power_kw;
+	}
 </script>
 
 <h3>This Page is for Javi's front</h3>
@@ -163,30 +143,20 @@ function cargarFormulario(dato) {
 <button style="border-radius: 10px; background-color: red;" onclick={borrarColeccion}>Borrar datos</button>
 <br>
 <br>
-Borrar colección
-<form onsubmit={() => borrarElemento(pais, year)}>
-	<input style="border-radius: 10px;" type="text" placeholder="País" bind:value={pais} required />
-
-	<input style="border-radius: 10px;" type="number" placeholder="Año" bind:value={year} required />
-
-	<button style="border-radius: 10px; background-color: red;" type="submit">Borrar</button>
-</form>
-<br>
-<br>
 
 Crear elemento
 <form onsubmit={() => crearElemento()}>
-	<input style="border-radius: 10px;" type="text" placeholder="País" bind:value={pais} required />
+	<input style="border-radius: 10px;" type="text" placeholder="País" bind:value={pais_crear} required />
 
-	<input style="border-radius: 10px;" type="number" placeholder="Año" bind:value={year} required />
+	<input style="border-radius: 10px;" type="number" placeholder="Año" bind:value={year_crear} required />
 
-	<input style="border-radius: 10px;" type="number" placeholder="Charging Points" bind:value={charging_point} required />
+	<input style="border-radius: 10px;" type="number" placeholder="Charging Points" bind:value={charging_point_crear} required />
 
-	<input style="border-radius: 10px;" type="number" placeholder="AC Slow" bind:value={ac_slow} required />
+	<input style="border-radius: 10px;" type="number" placeholder="AC Slow" bind:value={ac_slow_crear} required />
 
-	<input style="border-radius: 10px;" type="number" placeholder="DC Fast" bind:value={dc_fast} required />
+	<input style="border-radius: 10px;" type="number" placeholder="DC Fast" bind:value={dc_fast_crear} required />
 
-	<input style="border-radius: 10px;" type="number" placeholder="Total Power kW" bind:value={total_power_kw} required />
+	<input style="border-radius: 10px;" type="number" placeholder="Total Power kW" bind:value={total_power_kw_crear} required />
 
 	<button style="border-radius: 10px; background-color: green;" type="submit">Crear</button>
 </form>
@@ -198,42 +168,42 @@ Crear elemento
 	<input style="border-radius: 10px;"
 		type="text"
 		placeholder="País"
-		bind:value={pais}
+		bind:value={pais_editar}
 		readonly
 	/>
 
 	<input style="border-radius: 10px;"
 		type="number"
 		placeholder="Año"
-		bind:value={year}
+		bind:value={year_editar}
 		readonly
 	/>
 
 	<input style="border-radius: 10px;"
 		type="number"
 		placeholder="Charging Points"
-		bind:value={charging_point}
+		bind:value={charging_point_editar}
 		required
 	/>
 
 	<input style="border-radius: 10px;"
 		type="number"
 		placeholder="AC Slow"
-		bind:value={ac_slow}
+		bind:value={ac_slow_editar}
 		required
 	/>
 
 	<input style="border-radius: 10px;"
 		type="number"
 		placeholder="DC Fast"
-		bind:value={dc_fast}
+		bind:value={dc_fast_editar}
 		required
 	/>
 
 	<input style="border-radius: 10px;"
 		type="number"
 		placeholder="Total Power kW"
-		bind:value={total_power_kw}
+		bind:value={total_power_kw_editar}
 		required
 	/>
 
