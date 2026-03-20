@@ -40,21 +40,17 @@
 
 	//Funcion de borrado de un elemento por su id
     async function borrarElemento(pais, year) {
-	try {
 		await fetch(`http://localhost:3000/api/v1/global-ev-charging-infrastructures/${pais}/${year}`, {
 			method: 'DELETE'
 		});
 
 		mensaje = "Datos Borrados";
 
-	} catch (err) {
-		console.error("Error borrando:", err);
 	}
-}
 
 	//Funcion para crear un elemento
 	async function crearElemento() {
-	try {
+	
 		const res = await fetch("http://localhost:3000/api/v1/global-ev-charging-infrastructures", {
 			method: 'POST',
 			headers: {
@@ -82,11 +78,7 @@
 			mensaje = "Error inesperado";
 		}
 
-	} catch (err) {
-		console.error("Error en POST:", err);
-		mensaje = "Error de conexión con el servidor";
 	}
-}
 </script>
 
 <h3>This Page is for Javi's front</h3>
