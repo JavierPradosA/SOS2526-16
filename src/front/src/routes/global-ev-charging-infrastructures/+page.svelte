@@ -80,7 +80,6 @@
 
 	}
 	async function actualizarElemento() {
-	try {
 		const res = await fetch(`http://localhost:3000/api/v1/global-ev-charging-infrastructures/${pais}/${year}`, {
 			method: 'PUT',
 			headers: {
@@ -106,11 +105,6 @@
 		} else {
 			mensaje = "Error inesperado";
 		}
-
-	} catch (err) {
-		console.error(err);
-		mensaje = "Error de conexión";
-	}
 }
 function cargarFormulario(dato) {
 	pais = dato.country;
