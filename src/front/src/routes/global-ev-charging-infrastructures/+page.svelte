@@ -11,7 +11,7 @@
 	let data = $state([]);
 	let mensaje = $state("");
 
-	let API = "/api/v1/global-ev-charging-infrastructures";
+	let API = "/api/v1/global-ev-charging-infrastructures/";
 
 	if (import.meta.env.DEV) {
 		API = "http://localhost:3000" + API;
