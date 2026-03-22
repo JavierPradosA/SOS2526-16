@@ -26,7 +26,7 @@
     </a>
   </li>
   <li>
-    <a href="./global-ev-charging-infrastructures">
+    <a href="./global-ev-sales">
       Frontend Ignacio
     </a>
   </li>
