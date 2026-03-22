@@ -177,7 +177,7 @@
 			<th style="border: 1px solid #ddd; padding: 8px;">Categoría</th>
 			<th style="border: 1px solid #ddd; padding: 8px;">Parámetro</th>
 			<th style="border: 1px solid #ddd; padding: 8px;">Modo</th>
-			<th style="border: 1px solid #ddd; padding: 8px;">Motor</th>
+			<th style="border: 1px solid #ddd; padding: 8px;">Motor(Powertrain)</th>
 			<th style="border: 1px solid #ddd; padding: 8px;">Año</th>
 			<th style="border: 1px solid #ddd; padding: 8px;">Unidad</th>
 			<th style="border: 1px solid #ddd; padding: 8px;">Valor</th>
