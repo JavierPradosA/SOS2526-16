@@ -230,7 +230,7 @@
 </form>
 
 
-<h3>Editar elemento</h3>
+<h2>Editar elemento</h2>
 
 <form onsubmit={actualizarElemento}>
 	<input
