@@ -1,6 +1,4 @@
 <script>
-	import Layout from "../global-ev-stock-volumes/+layout.svelte";
-
 	
 	// 🔹 CREAR
 	let pais_crear = $state('');
@@ -9,14 +7,6 @@
 	let ac_slow_crear = $state('');
 	let dc_fast_crear = $state('');
 	let total_power_kw_crear = $state('');
-
-	// 🔹 EDITAR
-	let pais_editar = $state('');
-	let year_editar = $state('');
-	let charging_point_editar = $state('');
-	let ac_slow_editar = $state('');
-	let dc_fast_editar = $state('');
-	let total_power_kw_editar = $state('');
 
 	// 🔹 BUSQUEDA AVANZADA
 
@@ -155,41 +145,9 @@
 		} else {
 			mensaje = 'Error inesperado al crear el elemento';
 		}
-		await getData();
 	}
 
-	// PUT
-	async function actualizarElemento() {
-		const res = await fetch(API + `${pais_editar}/${year_editar}`, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				country: pais_editar,
-				year: Number(year_editar),
-				charging_point: Number(charging_point_editar),
-				ac_slow: Number(ac_slow_editar),
-				dc_fast: Number(dc_fast_editar),
-				total_power_kw: Number(total_power_kw_editar)
-			})
-		});
 
-		if (res.status === 200) {
-			mensaje = 'Elemento actualizado';
-			await getData();
-		} else {
-			mensaje = 'Error al actualizar';
-		}
-	}
-
-	// CARGAR DATOS EN FORM EDITAR
-	function cargarFormulario(dato) {
-		pais_editar = dato.country;
-		year_editar = dato.year;
-		charging_point_editar = dato.charging_point;
-		ac_slow_editar = dato.ac_slow;
-		dc_fast_editar = dato.dc_fast;
-		total_power_kw_editar = dato.total_power_kw;
-	}
 </script>
 
 <button style="border-radius: 10px; background-color: aquamarine;" onclick={LoadData}
@@ -247,10 +205,10 @@
 					>{dato.total_power_kw}</td
 				>
 				<td style="border: 1px solid black;padding: 8px;text-align: center;"
-					><button
-						style="border-radius: 10px; background-color: cornflowerblue;"
-						onclick={() => cargarFormulario(dato)}>Editar</button
 					>
+					<a href={`/global-ev-charging-infrastructures/${dato.country}/${dato.year}`} style="border-radius: 10px; background-color: lightblue; padding: 5px;"
+						>Editar</a>
+				
 					<button
 						style="border-radius: 10px; background-color: cornflowerblue;"
 						onclick={() => borrarElemento(dato.country, dato.year)}>Borrar fila</button
@@ -317,60 +275,6 @@ Crear elemento
 	/>
 
 	<button style="border-radius: 10px; background-color: green;" type="submit">Crear</button>
-</form>
-
-<h3>Editar elemento</h3>
-
-<form onsubmit={actualizarElemento}>
-	<input
-		style="border-radius: 10px;"
-		type="text"
-		placeholder="País"
-		bind:value={pais_editar}
-		readonly
-	/>
-
-	<input
-		style="border-radius: 10px;"
-		type="number"
-		placeholder="Año"
-		bind:value={year_editar}
-		readonly
-	/>
-
-	<input
-		style="border-radius: 10px;"
-		type="number"
-		placeholder="Charging Points"
-		bind:value={charging_point_editar}
-		required
-	/>
-
-	<input
-		style="border-radius: 10px;"
-		type="number"
-		placeholder="AC Slow"
-		bind:value={ac_slow_editar}
-		required
-	/>
-
-	<input
-		style="border-radius: 10px;"
-		type="number"
-		placeholder="DC Fast"
-		bind:value={dc_fast_editar}
-		required
-	/>
-
-	<input
-		style="border-radius: 10px;"
-		type="number"
-		placeholder="Total Power kW"
-		bind:value={total_power_kw_editar}
-		required
-	/>
-
-	<button style="border-radius: 10px; background-color: green;" type="submit">Actualizar</button>
 </form>
 
 Busqueda avanzada
