@@ -1,6 +1,5 @@
 <script>
-	import { count } from 'console';
-
+	
 	// 🔹 CREAR
 	let pais_crear = $state('');
 	let year_crear = $state('');
