@@ -1,4 +1,6 @@
 <script>
+	import Layout from "../global-ev-stock-volumes/+layout.svelte";
+
 	
 	// 🔹 CREAR
 	let pais_crear = $state('');
@@ -106,6 +108,12 @@
 		} else {
 			mensaje = 'Error inesperado';
 		}
+		await getData();
+	}
+
+	async function recuperar_Datos_inicales() {
+		await borrarColeccion();
+		await LoadData();	
 	}
 
 	// DELETE ALL
@@ -189,8 +197,8 @@
 >
 <br />
 <br />
-<button style="border-radius: 10px; background-color: cornflowerblue;" onclick={getData}
-	>Obtener datos</button
+<button style="border-radius: 10px; background-color: aquamarine;" onclick={recuperar_Datos_inicales}
+	>Recuperar datos iniciales</button
 >
 <table style="border-collapse: collapse; width: 100%;">
 	<thead>
