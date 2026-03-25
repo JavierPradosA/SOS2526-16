@@ -1,4 +1,6 @@
 <script>
+	import { count } from 'console';
+
 	// 🔹 CREAR
 	let pais_crear = $state('');
 	let year_crear = $state('');
@@ -15,6 +17,33 @@
 	let dc_fast_editar = $state('');
 	let total_power_kw_editar = $state('');
 
+	// 🔹 BUSQUEDA AVANZADA
+
+	// COUNTRY
+	let pais_busqueda = $state('');
+
+	// YEAR
+	let year_mode = $state('eq'); // "eq" o "range"
+	let year_busqueda = $state('');
+	let year_from = $state('');
+	let year_to = $state('');
+
+	// CHARGING POINT
+	let charging_point_busqueda = $state('');
+	let charging_point_mode = $state('eq'); // eq | gt | lt
+
+	// AC SLOW
+	let ac_slow_busqueda = $state('');
+	let ac_slow_mode = $state('eq');
+
+	// DC FAST
+	let dc_fast_busqueda = $state('');
+	let dc_fast_mode = $state('eq');
+
+	// TOTAL POWER
+	let total_power_kw_busqueda = $state('');
+	let total_power_kw_mode = $state('eq');
+
 	// 🔹 GENERAL
 	let data = $state([]);
 	let mensaje = $state('');
@@ -27,9 +56,49 @@
 		data = await res.json();
 	}
 
+	async function getData_campos() {
+		let url = API;
+		let params = [];
+
+		// COUNTRY (exacto)
+		if (pais_busqueda) {
+			params.push(`country=${pais_busqueda}`);
+		}
+
+		// YEAR
+		if (year_mode === 'eq' && year_busqueda) {
+			params.push(`year=${year_busqueda}`);
+		}
+
+		if (year_mode === 'range') {
+			if (year_from) params.push(`from=${year_from}`);
+			if (year_to) params.push(`to=${year_to}`);
+		}
+
+		// NUMÉRICOS
+		function addNumeric(field, value, mode) {
+			if (!value) return;
+
+			if (mode === 'eq') params.push(`${field}=${value}`);
+			if (mode === 'gt') params.push(`${field}_gt=${value}`);
+			if (mode === 'lt') params.push(`${field}_lt=${value}`);
+		}
+
+		addNumeric('charging_point', charging_point_busqueda, charging_point_mode);
+		addNumeric('ac_slow', ac_slow_busqueda, ac_slow_mode);
+		addNumeric('dc_fast', dc_fast_busqueda, dc_fast_mode);
+		addNumeric('total_power_kw', total_power_kw_busqueda, total_power_kw_mode);
+
+		if (params.length > 0) {
+			url += '?' + params.join('&');
+		}
+
+		const res = await fetch(url);
+		data = await res.json();
+	}
+
 	// LOAD INITIAL DATA
 	async function LoadData() {
-
 		const res = await fetch(API + 'loadInitialData');
 		if (res.status === 201) {
 			mensaje = 'Datos cargados correctamente';
@@ -171,8 +240,14 @@
 					>{dato.total_power_kw}</td
 				>
 				<td style="border: 1px solid black;padding: 8px;text-align: center;"
-					><button style="border-radius: 10px; background-color: cornflowerblue;" onclick={() => cargarFormulario(dato)}>Editar</button>
-					<button style="border-radius: 10px; background-color: cornflowerblue;" onclick={() => borrarElemento(dato.country, dato.year)}>Borrar fila</button></td
+					><button
+						style="border-radius: 10px; background-color: cornflowerblue;"
+						onclick={() => cargarFormulario(dato)}>Editar</button
+					>
+					<button
+						style="border-radius: 10px; background-color: cornflowerblue;"
+						onclick={() => borrarElemento(dato.country, dato.year)}>Borrar fila</button
+					></td
 				>
 			</tr>
 		{/each}
@@ -291,5 +366,123 @@ Crear elemento
 	<button style="border-radius: 10px; background-color: green;" type="submit">Actualizar</button>
 </form>
 
+Busqueda avanzada
+<form
+	onsubmit={getData_campos}
+	style="display: flex; flex-direction: column; gap: 10px; max-width: 500px;"
+>
+	<!-- COUNTRY -->
+	<input
+		style="border-radius: 10px; padding: 5px;"
+		type="text"
+		placeholder="País"
+		bind:value={pais_busqueda}
+	/>
+
+	<!-- YEAR -->
+	<div style="display: flex; gap: 5px;">
+		<select bind:value={year_mode} style="border-radius: 10px;">
+			<option value="eq">Exacto</option>
+			<option value="range">Rango</option>
+		</select>
+
+		{#if year_mode === 'eq'}
+			<input
+				type="number"
+				placeholder="Año"
+				bind:value={year_busqueda}
+				style="border-radius: 10px; padding: 5px;"
+			/>
+		{/if}
+
+		{#if year_mode === 'range'}
+			<input
+				type="number"
+				placeholder="From"
+				bind:value={year_from}
+				style="border-radius: 10px; padding: 5px;"
+			/>
+			<input
+				type="number"
+				placeholder="To"
+				bind:value={year_to}
+				style="border-radius: 10px; padding: 5px;"
+			/>
+		{/if}
+	</div>
+
+	<!-- FUNCIÓN PARA CAMPOS NUMÉRICOS -->
+	<!-- CHARGING POINT -->
+	<div style="display: flex; gap: 5px;">
+		<select bind:value={charging_point_mode} style="border-radius: 10px;">
+			<option value="eq">=</option>
+			<option value="gt">mayor que</option>
+			<option value="lt">menor que</option>
+		</select>
+
+		<input
+			type="number"
+			placeholder="Charging Points"
+			bind:value={charging_point_busqueda}
+			style="border-radius: 10px; padding: 5px;"
+		/>
+	</div>
+
+	<!-- AC SLOW -->
+	<div style="display: flex; gap: 5px;">
+		<select bind:value={ac_slow_mode} style="border-radius: 10px;">
+			<option value="eq">=</option>
+			<option value="gt">mayor que</option>
+			<option value="lt">menor que</option>
+		</select>
+
+		<input
+			type="number"
+			placeholder="AC Slow"
+			bind:value={ac_slow_busqueda}
+			style="border-radius: 10px; padding: 5px;"
+		/>
+	</div>
+
+	<!-- DC FAST -->
+	<div style="display: flex; gap: 5px;">
+		<select bind:value={dc_fast_mode} style="border-radius: 10px;">
+			<option value="eq">=</option>
+			<option value="gt">mayor que</option>
+			<option value="lt">menor que</option>
+		</select>
+
+		<input
+			type="number"
+			placeholder="DC Fast"
+			bind:value={dc_fast_busqueda}
+			style="border-radius: 10px; padding: 5px;"
+		/>
+	</div>
+
+	<!-- TOTAL POWER -->
+	<div style="display: flex; gap: 5px;">
+		<select bind:value={total_power_kw_mode} style="border-radius: 10px;">
+			<option value="eq">=</option>
+			<option value="gt">mayor que</option>
+			<option value="lt">menor que</option>
+		</select>
+
+		<input
+			type="number"
+			placeholder="Total Power kW"
+			bind:value={total_power_kw_busqueda}
+			style="border-radius: 10px; padding: 5px;"
+		/>
+	</div>
+
+	<!-- BOTÓN -->
+	<button
+		type="submit"
+		style="border-radius: 10px; background-color: green; color: white; padding: 8px;"
+	>
+		Buscar
+	</button>
+</form>
 <p>Estado de la operación:</p>
 {mensaje}
