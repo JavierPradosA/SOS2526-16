@@ -106,4 +106,8 @@
 	<button style="border-radius: 10px; background-color: green;" type="submit">Actualizar</button>
 </form>
 
+<button>
+	<a href="/global-ev-charging-infrastructures">Volver</a>
+</button>
+
 {mensaje}

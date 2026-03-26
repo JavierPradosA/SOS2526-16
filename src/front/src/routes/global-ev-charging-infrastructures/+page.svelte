@@ -1,5 +1,5 @@
 <script>
-	
+	import {onMount} from 'svelte';
 	// 🔹 CREAR
 	let pais_crear = $state('');
 	let year_crear = $state('');
@@ -147,7 +147,9 @@
 		}
 	}
 
-
+	onMount(async() => {
+       await getData();
+    });
 </script>
 
 <button style="border-radius: 10px; background-color: aquamarine;" onclick={LoadData}
