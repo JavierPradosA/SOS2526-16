@@ -1,5 +1,5 @@
 <script>
-	
+	import {onMount} from 'svelte';
 	// 🔹 CREAR
 	let pais_crear = $state('');
 	let year_crear = $state('');
@@ -147,7 +147,9 @@
 		}
 	}
 
-
+	onMount(async() => {
+       await getData();
+    });
 </script>
 
 <button style="border-radius: 10px; background-color: aquamarine;" onclick={LoadData}
@@ -206,9 +208,10 @@
 				>
 				<td style="border: 1px solid black;padding: 8px;text-align: center;"
 					>
-					<a href={`/global-ev-charging-infrastructures/${dato.country}/${dato.year}`} style="border-radius: 10px; background-color: lightblue; padding: 5px;"
+					<button style="border-radius: 10px; background-color: cornflowerblue;">
+					<a href={`/global-ev-charging-infrastructures/${dato.country}/${dato.year}`} 
 						>Editar</a>
-				
+					</button>
 					<button
 						style="border-radius: 10px; background-color: cornflowerblue;"
 						onclick={() => borrarElemento(dato.country, dato.year)}>Borrar fila</button
