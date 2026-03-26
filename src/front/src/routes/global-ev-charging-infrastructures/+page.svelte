@@ -208,9 +208,10 @@
 				>
 				<td style="border: 1px solid black;padding: 8px;text-align: center;"
 					>
-					<a href={`/global-ev-charging-infrastructures/${dato.country}/${dato.year}`} style="border-radius: 10px; background-color: lightblue; padding: 5px;"
+					<button style="border-radius: 10px; background-color: cornflowerblue;">
+					<a href={`/global-ev-charging-infrastructures/${dato.country}/${dato.year}`} 
 						>Editar</a>
-				
+					</button>
 					<button
 						style="border-radius: 10px; background-color: cornflowerblue;"
 						onclick={() => borrarElemento(dato.country, dato.year)}>Borrar fila</button
