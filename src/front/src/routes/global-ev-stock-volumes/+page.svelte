@@ -106,14 +106,7 @@
 	}
 
 	// Formulario de edición de registros
-	function cargarFormulario(dato) {
-		pais_editar = dato.region_country;
-		year_editar = dato.year;
-		ev_stock_editar = dato.ev_stock;
-		macroregion_stock_editar = dato.macroregion_stock;
-		worldwide_stock_editar = dato.worldwide_stock;
-		oil_world_displacement_editar = dato.oil_world_displacement;
-	}
+	
 </script>
 
 <button style="border-radius: 10px; background-color: aquamarine;" onclick={LoadData}>Cargar Datos</button>
@@ -166,7 +159,7 @@
 					>{dato.oil_world_displacement}</td
 				>
 				<td style="border: 1px solid black;padding: 8px;text-align: center;"
-					><button style="border-radius: 10px; background-color: cornflowerblue;" onclick={() => cargarFormulario(dato)}>Editar</button>
+					><button style="border-radius: 10px; background-color: cornflowerblue;"><a href={`/global-ev-stock-volumes/${dato.region_country}/${dato.year}`}>Editar</a></button>
 					<button style="border-radius: 10px; background-color: cornflowerblue;" onclick={() => borrarElemento(dato.region_country, dato.year)}>Borrar registro</button></td
 				>
 			</tr>
