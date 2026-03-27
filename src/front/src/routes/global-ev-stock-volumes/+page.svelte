@@ -1,3 +1,4 @@
+<svelte:head><title>Global EV Stock Volumes</title></svelte:head>
 <script>
 // 🔹 CREAR
 	let pais_crear = $state('');
