@@ -1,3 +1,6 @@
+<svelte:head>
+	<title>global-ev-charging-infrastuctures</title>
+</svelte:head>
 <script>
 	import {onMount} from 'svelte';
 	// 🔹 CREAR
