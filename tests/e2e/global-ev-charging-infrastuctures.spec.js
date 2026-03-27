@@ -12,5 +12,6 @@ test('has title', async ({ page }) => {
 
 test('tiene informacion', async ({page}) => {
     await page.goto(app);
-    
+    await page.getByRole('link', { name: 'Frontend Javier' }).click();
+    await expect(page).toHaveTitle(/global-ev-charging-infrastuctures/);
 });
