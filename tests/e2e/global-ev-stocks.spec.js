@@ -18,7 +18,5 @@ test('Contiene información', async ({ page }) => {
   await page.getByRole('link', { name: 'Frontend Adrián' }).click();
 
   // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Frontend Adrián' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Global EV Stock Volumes/ })).toBeVisible();
 });
-
-
