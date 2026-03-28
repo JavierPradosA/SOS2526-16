@@ -34,6 +34,7 @@ test("Cargar datos iniciales", async ({ page }) => {
   expect(numDatos).toBe(10);
 });
 
+//Editar un elemento y comprobar que el cambio se refleja en la tabla
 test("Editar elemento", async ({ page }) => {
   await setup(page);
 
@@ -116,12 +117,13 @@ test("Crear elemento y comprobar total de filas", async ({ page }) => {
   expect(numDatos).toBe(11);
 });
 
+//Borrar un elemento y comprobar que el número de filas disminuye en 1
 test("Borrar un elemento", async ({ page }) => {
   await setup(page);
 
   const filasAntes = await page.getByTestId("filas tabla").count();
 
-  // Borrar primera fila
+  //Borrar primera fila
   await page.getByRole("button", { name: "Borrar fila" }).first().click();
 
   await page.waitForTimeout(1000);
