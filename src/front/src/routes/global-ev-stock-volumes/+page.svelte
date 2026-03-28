@@ -1,5 +1,6 @@
 <svelte:head><title>Global EV Stock Volumes</title></svelte:head>
 <script>
+	import { onMount } from "svelte";
 // 🔹 CREAR
 	let pais_crear = $state('');
 	let year_crear = $state('');
@@ -8,13 +9,31 @@
 	let worldwide_stock_crear = $state('');
 	let oil_world_displacement_crear = $state('');
 
-	// 🔹 EDITAR
-	let pais_editar = $state('');
-	let year_editar = $state('');
-	let ev_stock_editar = $state('');
-	let macroregion_stock_editar = $state('');
-	let worldwide_stock_editar = $state('');
-	let oil_world_displacement_editar = $state('');
+//Búsqueda avanzada
+	// REGION_COUNTRY
+	let pais_busqueda = $state(''); 
+
+	// YEAR
+	let year_mode = $state('eq'); // "eq" o "range"
+	let year_busqueda = $state('');
+	let year_from = $state('');
+	let year_to = $state('');
+
+	// EV_STOCK
+	let ev_stock_busqueda = $state('');
+	let ev_stock_mode = $state('eq'); // eq | gt | lt
+
+	// MACROREGION_STOCK
+	let macroregion_stock_busqueda = $state('');
+	let macroregion_stock_mode = $state('eq');
+
+	// WORLDWIDE_STOCK
+	let worldwide_stock_busqueda = $state('');
+	let worldwide_stock_mode = $state('eq');
+
+	// OIL_WORLD_DISPLACEMENT
+	let oil_world_displacement_busqueda = $state('');
+	let oil_world_displacement_mode = $state('eq');
 
 
 // 🔹 GENERAL
@@ -26,6 +45,48 @@
 	// GET Colección
 	async function getData() {
 		const res = await fetch(URL_API);
+		data = await res.json();
+	}
+
+	//GET AVANZADO
+
+	async function getData_parametro() {
+		let url = URL_API;
+		let params = [];
+
+		// COUNTRY (exacto)
+		if (pais_busqueda) {
+			params.push(`region_country=${pais_busqueda}`);
+		}
+
+		// YEAR
+		if (year_mode === 'eq' && year_busqueda) {
+			params.push(`year=${year_busqueda}`);
+		}
+		if (year_mode === 'range') {
+			if (year_from) params.push(`from=${year_from}`);
+			if (year_to) params.push(`to=${year_to}`);
+		}
+
+		// NUMÉRICOS
+		function addNumeric(field, value, mode) {
+			if (!value) return;
+
+			if (mode === 'eq') params.push(`${field}=${value}`);
+			if (mode === 'gt') params.push(`${field}_gt=${value}`);
+			if (mode === 'lt') params.push(`${field}_lt=${value}`);
+		}
+
+		addNumeric('ev_stock', ev_stock_busqueda, ev_stock_mode);
+		addNumeric('macroregion_stock', macroregion_stock_busqueda, macroregion_stock_mode);
+		addNumeric('worldwide_stock', worldwide_stock_busqueda, worldwide_stock_mode);
+		addNumeric('oil_world_displacement', oil_world_displacement_busqueda, oil_world_displacement_mode);
+
+		if (params.length > 0) {
+			url += '?' + params.join('&');
+		}
+
+		const res = await fetch(url);
 		data = await res.json();
 	}
 
@@ -83,31 +144,10 @@
 		await getData();
 	}
 
-	// PUT
-	async function actualizarElemento() {
-		const res = await fetch(URL_API + `${pais_editar}/${year_editar}`, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				region_country: pais_editar,
-				year: Number(year_editar),
-				ev_stock: Number(ev_stock_editar),
-				macroregion_stock: Number(macroregion_stock_editar),
-				worldwide_stock: Number(worldwide_stock_editar),
-				oil_world_displacement: Number(oil_world_displacement_editar)
-			})
-		});
+	onMount(async() => {
+       await getData();
+    });
 
-		if (res.status === 200) {
-			mensajeEstado = 'Elemento actualizado';
-			await getData();
-		} else {
-			mensajeEstado = 'Error al actualizar';
-		}
-	}
-
-	// Formulario de edición de registros
-	
 </script>
 
 <button style="border-radius: 10px; background-color: aquamarine;" onclick={LoadData}>Cargar Datos</button>
@@ -223,60 +263,122 @@
 	<button style="border-radius: 10px; background-color: green;" type="submit">Crear</button>
 </form>
 
+<h2>Búsqueda avanzada</h2>
 
-<h2>Editar elemento</h2>
-
-<form onsubmit={actualizarElemento}>
+<form onsubmit={getData_parametro}
+	style="display: flex; flex-direction: column; gap: 10px; max-width: 500px;"
+>
+	<!-- REGION_COUNTRY -->
 	<input
-		style="border-radius: 10px;"
+		style="border-radius: 10px; padding: 5px;"
 		type="text"
 		placeholder="País"
-		bind:value={pais_editar}
-		readonly
+		bind:value={pais_busqueda}
 	/>
 
-	<input
-		style="border-radius: 10px;"
-		type="number"
-		placeholder="Año"
-		bind:value={year_editar}
-		readonly
-	/>
+	<!-- YEAR -->
+	<div style="display: flex; gap: 5px;">
+		<select bind:value={year_mode} style="border-radius: 10px;">
+			<option value="eq">VALOR EXACTO</option>
+			<option value="range">Rango</option>
+		</select>
 
-	<input
-		style="border-radius: 10px;"
-		type="number"
-		placeholder="Ev stock"
-		bind:value={ev_stock_editar}
-		required
-	/>
+		{#if year_mode === 'eq'}
+			<input
+				type="number"
+				placeholder="Año"
+				bind:value={year_busqueda}
+				style="border-radius: 10px; padding: 5px;"
+			/>
+		{/if}
 
-	<input
-		style="border-radius: 10px;"
-		type="number"
-		placeholder="Macroregion stock"
-		bind:value={macroregion_stock_editar}
-		required
-	/>
+		{#if year_mode === 'range'}
+			<input
+				type="number"
+				placeholder="From"
+				bind:value={year_from}
+				style="border-radius: 10px; padding: 5px;"
+			/>
+			<input
+				type="number"
+				placeholder="To"
+				bind:value={year_to}
+				style="border-radius: 10px; padding: 5px;"
+			/>
+		{/if}
+	</div>
 
-	<input
-		style="border-radius: 10px;"
-		type="number"
-		placeholder="Worldwide stock"
-		bind:value={worldwide_stock_editar}
-		required
-	/>
+	<!-- EV_STOCK -->
+	<div style="display: flex; gap: 5px;">
+		<select bind:value={ev_stock_mode} style="border-radius: 10px;">
+			<option value="eq">=</option>
+			<option value="gt">mayor que</option>
+			<option value="lt">menor que</option>
+		</select>
 
-	<input
-		style="border-radius: 10px;"
-		type="number"
-		placeholder="Oil world displacement"
-		bind:value={oil_world_displacement_editar}
-		required
-	/>
+		<input
+			type="number"
+			placeholder="EV Stock"
+			bind:value={ev_stock_busqueda}
+			style="border-radius: 10px; padding: 5px;"
+		/>
+	</div>
 
-	<button style="border-radius: 10px; background-color: green;" type="submit">Actualizar</button>
+	<!-- MACROREGION_STOCK -->
+	<div style="display: flex; gap: 5px;">
+		<select bind:value={macroregion_stock_mode} style="border-radius: 10px;">
+			<option value="eq">=</option>
+			<option value="gt">mayor que</option>
+			<option value="lt">menor que</option>
+		</select>
+
+		<input
+			type="number"
+			placeholder="Macroregion_stock"
+			bind:value={macroregion_stock_busqueda}
+			style="border-radius: 10px; padding: 5px;"
+		/>
+	</div>
+
+	<!-- Worldwide stock -->
+	<div style="display: flex; gap: 5px;">
+		<select bind:value={worldwide_stock_mode} style="border-radius: 10px;">
+			<option value="eq">=</option>
+			<option value="gt">mayor que</option>
+			<option value="lt">menor que</option>
+		</select>
+
+		<input
+			type="number"
+			placeholder="Worldwide Stock"
+			bind:value={worldwide_stock_busqueda}
+			style="border-radius: 10px; padding: 5px;"
+		/>
+	</div>
+
+	<!-- Oil_world_displacement -->
+	<div style="display: flex; gap: 5px;">
+		<select bind:value={oil_world_displacement_mode} style="border-radius: 10px;">
+			<option value="eq">=</option>
+			<option value="gt">mayor que</option>
+			<option value="lt">menor que</option>
+		</select>
+
+		<input
+			type="number"
+			placeholder="Oil_world_displacement"
+			bind:value={oil_world_displacement_busqueda}
+			style="border-radius: 10px; padding: 5px;"
+		/>
+	</div>
+
+	<!-- BOTÓN -->
+	<button type="submit" style="border-radius: 10px; background-color: green; color: white; padding: 8px;"
+	>Buscar
+	</button>
 </form>
+
+
 
 <p>Estado de la operación:</p>
 {mensajeEstado}
