@@ -1,3 +1,6 @@
+<svelte:head>
+	<title>global-ev-sales</title>
+</svelte:head>
 <script>
 	// VARIABLES PARA CREAR
 	let region_crear = $state('');

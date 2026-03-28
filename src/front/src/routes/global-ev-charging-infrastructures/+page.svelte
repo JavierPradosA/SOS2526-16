@@ -155,12 +155,12 @@
     });
 </script>
 
-<button style="border-radius: 10px; background-color: aquamarine;" onclick={LoadData}
+<button data-testid="cargar datos" style="border-radius: 10px; background-color: aquamarine;" onclick={LoadData}
 	>Cargar Datos</button
 >
 <br />
 <br />
-<button style="border-radius: 10px; background-color: aquamarine;" onclick={recuperar_Datos_inicales}
+<button data-testid="recuperar" style="border-radius: 10px; background-color: aquamarine;" onclick={recuperar_Datos_inicales}
 	>Recuperar datos iniciales</button
 >
 <table style="border-collapse: collapse; width: 100%;">
@@ -198,7 +198,7 @@
 	</thead>
 	<tbody>
 		{#each data as dato (dato.country + dato.year)}
-			<tr>
+			<tr data-testid="filas tabla">
 				<td style="border: 1px solid black;padding: 8px;text-align: center;">{dato.country}</td>
 				<td style="border: 1px solid black;padding: 8px;text-align: center;">{dato.year}</td>
 				<td style="border: 1px solid black;padding: 8px;text-align: center;"
@@ -224,7 +224,7 @@
 		{/each}
 	</tbody>
 </table>
-<button style="border-radius: 10px; background-color: red;" onclick={borrarColeccion}
+<button data-testid="borrar datos" style="border-radius: 10px; background-color: red;" onclick={borrarColeccion}
 	>Borrar datos</button
 >
 <br />
@@ -235,7 +235,7 @@ Crear elemento
 	<input
 		style="border-radius: 10px;"
 		type="text"
-		placeholder="País"
+		placeholder="País crear"
 		bind:value={pais_crear}
 		required
 	/>
@@ -243,7 +243,7 @@ Crear elemento
 	<input
 		style="border-radius: 10px;"
 		type="number"
-		placeholder="Año"
+		placeholder="Año crear"
 		bind:value={year_crear}
 		required
 	/>
@@ -251,7 +251,7 @@ Crear elemento
 	<input
 		style="border-radius: 10px;"
 		type="number"
-		placeholder="Charging Points"
+		placeholder="Charging Points crear"
 		bind:value={charging_point_crear}
 		required
 	/>
@@ -259,7 +259,7 @@ Crear elemento
 	<input
 		style="border-radius: 10px;"
 		type="number"
-		placeholder="AC Slow"
+		placeholder="AC Slow crear"
 		bind:value={ac_slow_crear}
 		required
 	/>
@@ -267,7 +267,7 @@ Crear elemento
 	<input
 		style="border-radius: 10px;"
 		type="number"
-		placeholder="DC Fast"
+		placeholder="DC Fast crear"
 		bind:value={dc_fast_crear}
 		required
 	/>
@@ -275,7 +275,7 @@ Crear elemento
 	<input
 		style="border-radius: 10px;"
 		type="number"
-		placeholder="Total Power kW"
+		placeholder="Total Power kW crear"
 		bind:value={total_power_kw_crear}
 		required
 	/>
@@ -292,7 +292,7 @@ Busqueda avanzada
 	<input
 		style="border-radius: 10px; padding: 5px;"
 		type="text"
-		placeholder="País"
+		placeholder="País búsqueda"
 		bind:value={pais_busqueda}
 	/>
 
@@ -306,7 +306,7 @@ Busqueda avanzada
 		{#if year_mode === 'eq'}
 			<input
 				type="number"
-				placeholder="Año"
+				placeholder="Año búsqueda"
 				bind:value={year_busqueda}
 				style="border-radius: 10px; padding: 5px;"
 			/>
@@ -339,7 +339,7 @@ Busqueda avanzada
 
 		<input
 			type="number"
-			placeholder="Charging Points"
+			placeholder="Charging Points búsqueda"
 			bind:value={charging_point_busqueda}
 			style="border-radius: 10px; padding: 5px;"
 		/>
@@ -355,7 +355,7 @@ Busqueda avanzada
 
 		<input
 			type="number"
-			placeholder="AC Slow"
+			placeholder="AC Slow búsqueda"
 			bind:value={ac_slow_busqueda}
 			style="border-radius: 10px; padding: 5px;"
 		/>
@@ -371,7 +371,7 @@ Busqueda avanzada
 
 		<input
 			type="number"
-			placeholder="DC Fast"
+			placeholder="DC Fast búsqueda"
 			bind:value={dc_fast_busqueda}
 			style="border-radius: 10px; padding: 5px;"
 		/>
