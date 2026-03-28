@@ -96,10 +96,10 @@
 		<input type="text" placeholder="Modo" bind:value={mode_editar} required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
 		<input type="text" placeholder="Motor (Powertrain)" bind:value={powertrain_editar} required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
 		<input type="text" placeholder="Unidad" bind:value={unit_editar} required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
-		<input type="number" step="any" placeholder="Valor" bind:value={value_editar} required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+		<input data-testid="edit-value" type="number" step="any" placeholder="Valor" bind:value={value_editar} required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
 		<input type="number" step="any" placeholder="Impacto Económico" bind:value={economic_impact_editar} required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
 
-		<button type="submit" style="padding: 10px; background-color: #ffbb33; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px;">
+		<button data-testid="btn-actualizar" type="submit" style="padding: 10px; background-color: #ffbb33; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px;">
 			Aplicar Cambios
 		</button>
 		

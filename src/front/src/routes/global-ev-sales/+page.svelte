@@ -162,9 +162,9 @@
 {/if}
 
 <div style="margin-bottom: 20px;">
-	<button style="padding: 10px; background-color: #33b5e5; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick={LoadData}>Cargar Datos Iniciales</button>
-	<button style="padding: 10px; background-color: #ffbb33; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick={getData}>Refrescar Tabla</button>
-	<button style="padding: 10px; background-color: #ff4444; color: white; border: none; border-radius: 5px; cursor: pointer; float: right;" onclick={borrarColeccion}>Borrar Todos los Datos</button>
+    <button data-testid="cargar datos" style="padding: 10px; background-color: #33b5e5; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick={LoadData}>Cargar Datos Iniciales</button>
+    <button style="padding: 10px; background-color: #ffbb33; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick={getData}>Refrescar Tabla</button>
+    <button data-testid="borrar datos" style="padding: 10px; background-color: #ff4444; color: white; border: none; border-radius: 5px; cursor: pointer; float: right;" onclick={borrarColeccion}>Borrar Todos los Datos</button>
 </div>
 
 <div style="background-color: #e9ecef; padding: 20px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 20px;">
@@ -213,7 +213,7 @@
 	</thead>
 	<tbody>
 		{#each data as dato (dato.region + dato.year)}
-			<tr>
+			<tr data-testid="filas tabla">	
 				<td style="border: 1px solid #ddd; padding: 8px;">{dato.region}</td>
 				<td style="border: 1px solid #ddd; padding: 8px;">{dato.category}</td>
 				<td style="border: 1px solid #ddd; padding: 8px;">{dato.parameter}</td>
@@ -225,7 +225,7 @@
 				<td style="border: 1px solid #ddd; padding: 8px;">{dato.economic_impact}</td>
 				<td style="border: 1px solid #ddd; padding: 8px;">
 					<a href="/global-ev-sales/{dato.region}/{dato.year}" style="padding: 5px 10px; background-color: #ffbb33; color: white; border: none; border-radius: 3px; cursor: pointer; margin-right: 5px; text-decoration: none; font-size: 13px; display: inline-block;">Editar</a>
-					<button style="padding: 5px; background-color: #ff4444; color: white; border: none; border-radius: 3px; cursor: pointer;" onclick={() => borrarElemento(dato.region, dato.year)}>Eliminar</button>
+					<button data-testid="btn-eliminar" style="padding: 5px; background-color: #ff4444; color: white; border: none; border-radius: 3px; cursor: pointer;" onclick={() => borrarElemento(dato.region, dato.year)}>Eliminar</button>
 				</td>
 			</tr>
 		{/each}
@@ -244,6 +244,6 @@
 		<input type="text" placeholder="Unidad" bind:value={unit_crear} required style="padding: 8px;" />
 		<input type="number" step="any" placeholder="Valor" bind:value={value_crear} required style="padding: 8px;" />
 		<input type="number" step="any" placeholder="Impacto Económico" bind:value={economic_impact_crear} required style="padding: 8px; grid-column: span 2;" />
-		<button type="submit" style="padding: 10px; background-color: #00C851; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; grid-column: span 2;">Guardar Nuevo</button>
+	<button data-testid="btn-crear" type="submit" style="padding: 10px; background-color: #00C851; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; grid-column: span 2;">Guardar Nuevo</button>
 	</form>
 </div>
