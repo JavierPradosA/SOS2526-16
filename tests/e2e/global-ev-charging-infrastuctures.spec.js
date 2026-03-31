@@ -26,7 +26,7 @@ test("Navegación a página con título", async ({ page }) => {
   await expect(page).toHaveTitle(/global-ev-charging-infrastuctures/);
 });
 
-//Cargar datos iniciales y que sean 10
+//Contar datos
 test("Cargar datos iniciales", async ({ page }) => {
   await setup(page);
 
