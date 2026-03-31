@@ -45,7 +45,7 @@ function evStockAPI(app) {
             // FILTROS STRING
             if (req.query.region_country) {
                 result = result.filter(d =>
-                    d.region_country === req.query.region_country.toLowerCase()
+                    d.region_country.toLowerCase() === req.query.region_country.toLowerCase()
                 );
             }
 
@@ -76,9 +76,9 @@ function evStockAPI(app) {
                 );
             }
 
-            if (req.query.ev_stock_bt) {
+            if (req.query.ev_stock_gt) {
                 result = result.filter(d =>
-                    d.ev_stock > Number(req.query.ev_stock_bt)
+                    d.ev_stock > Number(req.query.ev_stock_gt)
                 );
             }
 
