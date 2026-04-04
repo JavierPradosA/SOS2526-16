@@ -51,7 +51,7 @@
 	}
 
 	async function getData_campos() {
-		let url = '/api/v1/global-ev-charging-infrastructures';
+		let url = API;
 		let params = [];
 
 		// COUNTRY (exacto)

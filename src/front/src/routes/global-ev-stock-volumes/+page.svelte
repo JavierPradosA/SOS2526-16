@@ -150,8 +150,8 @@
 
 </script>
 
-<button style="border-radius: 10px; background-color: aquamarine;" onclick={LoadData}>Cargar Datos</button>
-<button style="border-radius: 10px; background-color: cornflowerblue;" onclick={getData}>Obtener registros</button>
+<button data-testid="cargar datos" style="border-radius: 10px; background-color: aquamarine;" onclick={LoadData}>Cargar Datos</button>
+<button data-testid="obtener registros"style="border-radius: 10px; background-color: cornflowerblue;" onclick={getData}>Obtener registros</button>
 
 <table style="border-collapse: collapse; width: 100%;">
 	<thead>
@@ -188,7 +188,7 @@
 	</thead>
 	<tbody>
 		{#each data as dato (dato.region_country + dato.year)}
-			<tr>
+			<tr data-testid="filas tabla" >
 				<td style="border: 1px solid black;padding: 8px;text-align: center;">{dato.region_country}</td>
 				<td style="border: 1px solid black;padding: 8px;text-align: center;">{dato.year}</td>
 				<td style="border: 1px solid black;padding: 8px;text-align: center;"
@@ -208,14 +208,14 @@
 	</tbody>
 </table>
 
-<button style="border-radius: 10px; background-color: red;" onclick={borrarColeccion}>Borrar datos</button>
+<button data-testid ="borrar datos" style="border-radius: 10px; background-color: red;" onclick={borrarColeccion}>Borrar datos</button>
 
 <h2>Crear registro </h2>
 <form onsubmit={() => crearElemento()}>
 	<input
 		style="border-radius: 10px;"
 		type="text"
-		placeholder="País"
+		placeholder="País crear"
 		bind:value={pais_crear}
 		required
 	/>
@@ -223,7 +223,7 @@
 	<input
 		style="border-radius: 10px;"
 		type="number"
-		placeholder="Año"
+		placeholder="Año crear"
 		bind:value={year_crear}
 		required
 	/>
@@ -231,7 +231,7 @@
 	<input
 		style="border-radius: 10px;"
 		type="number"
-		placeholder="Ev stock"
+		placeholder="Ev_stock crear"
 		bind:value={ev_stock_crear}
 		required
 	/>
@@ -239,7 +239,7 @@
 	<input
 		style="border-radius: 10px;"
 		type="number"
-		placeholder="Macroregion_stock"
+		placeholder="Macroregion_stock crear"
 		bind:value={macroregion_stock_crear}
 		required
 	/>
@@ -247,7 +247,7 @@
 	<input
 		style="border-radius: 10px;"
 		type="number"
-		placeholder="Worldwide stock"
+		placeholder="Worldwide_stock crear"
 		bind:value={worldwide_stock_crear}
 		required
 	/>
@@ -255,7 +255,7 @@
 	<input
 		style="border-radius: 10px;"
 		type="number"
-		placeholder="Oil_world_displacement"
+		placeholder="Oil_world_displacement crear"
 		bind:value={oil_world_displacement_crear}
 		required
 	/>
@@ -272,7 +272,7 @@
 	<input
 		style="border-radius: 10px; padding: 5px;"
 		type="text"
-		placeholder="País"
+		placeholder="País búsqueda"
 		bind:value={pais_busqueda}
 	/>
 
@@ -286,7 +286,7 @@
 		{#if year_mode === 'eq'}
 			<input
 				type="number"
-				placeholder="Año"
+				placeholder="Año búsqueda"
 				bind:value={year_busqueda}
 				style="border-radius: 10px; padding: 5px;"
 			/>
@@ -318,7 +318,7 @@
 
 		<input
 			type="number"
-			placeholder="EV Stock"
+			placeholder="EV_stock búsqueda"
 			bind:value={ev_stock_busqueda}
 			style="border-radius: 10px; padding: 5px;"
 		/>
@@ -334,7 +334,7 @@
 
 		<input
 			type="number"
-			placeholder="Macroregion_stock"
+			placeholder="Macroregion_stock búsqueda"
 			bind:value={macroregion_stock_busqueda}
 			style="border-radius: 10px; padding: 5px;"
 		/>
@@ -350,7 +350,7 @@
 
 		<input
 			type="number"
-			placeholder="Worldwide Stock"
+			placeholder="Worldwide_stock búsqueda"
 			bind:value={worldwide_stock_busqueda}
 			style="border-radius: 10px; padding: 5px;"
 		/>
@@ -366,7 +366,7 @@
 
 		<input
 			type="number"
-			placeholder="Oil_world_displacement"
+			placeholder="Oil_world_displacement búsqueda"
 			bind:value={oil_world_displacement_busqueda}
 			style="border-radius: 10px; padding: 5px;"
 		/>
