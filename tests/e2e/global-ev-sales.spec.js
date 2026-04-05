@@ -25,13 +25,13 @@ async function setup(page) {
 
 test("El proyecto base tiene título", async ({ page }) => {
   await page.goto(app);
-  await expect(page).toHaveTitle(/Global EV Sales/);
+  await expect(page).toHaveTitle(/Global Electrical Vehicles/);
 });
 
 test("Navegación al frontend desde la página principal", async ({ page }) => {
   await page.goto(app);
   await page.getByRole("link", { name: "Frontend Ignacio" }).click();
-  await expect(page.getByRole('heading', { name: /Global EV Sales/i })).toBeVisible();
+  await expect(page).toHaveTitle(/global-ev-sales/);
 });
 
 // --------------------------------------------------

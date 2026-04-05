@@ -2,6 +2,7 @@
 	<title>global-ev-sales</title>
 </svelte:head>
 <script>
+	import { onMount } from 'svelte';
 	// VARIABLES PARA CREAR
 	let region_crear = $state('');
 	let category_crear = $state('');
@@ -150,9 +151,9 @@
 		await getData();
 	}
 
-	$effect(() => {
-		getData();
-	});
+	onMount(() => {
+        getData();
+    });
 </script>
 
 {#if mensaje}
