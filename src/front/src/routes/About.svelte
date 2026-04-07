@@ -74,3 +74,8 @@
 <a href="https://github.com/gti-sos/SOS2526-16" target="_blank">
   GitHub del equipo
 </a>
+
+<h2>Deploy extra</h2>
+<a href = "sos2526-16-production.up.railway.app" target="_blank">
+  Deploy extra en railway
+</a>
