@@ -12,7 +12,6 @@
 	<li>
 		<a href="./global-ev-charging-infrastructures"> Frontend Javier </a>
 	</li>
-	ç
 	<li>
 		<a href="./global-ev-charging-infrastructures-vue"> Frontend Vue (Javi) </a>
 	</li>
