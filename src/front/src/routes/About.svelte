@@ -14,7 +14,7 @@
 	</li>
 	ç
 	<li>
-		<a href="./global-ev-charging-infrastructures-vue"> Frontend Javier (Vue) </a>
+		<a href="./global-ev-charging-infrastructures-vue"> Frontend Vue (Javi) </a>
 	</li>
 	<li>
 		<a href="./global-ev-stock-volumes"> Frontend Adrián </a>
