@@ -22,9 +22,8 @@
 
     "build-all": "npm run build-svelte && npm run build-vue",
 
-    "build-svelte": "cd src/front && npm install --include=dev && npm run build",
-
-    "build-vue": "cd frontend-vue && npm install && npm run build",
+    "build-vue": "npm --prefix frontend-vue install && npm --prefix frontend-vue run build",
+    "build-svelte": "npm --prefix src/front install --include=dev && npm --prefix src/front run build",
 
     "dev-front": "cd src/front && npm run dev -- --open",
 
