@@ -1,5 +1,5 @@
 ## SOS2526-16
-
+[![Known Vulnerabilities](https://snyk.io/test/github/gti-sos/SOS2526-16/badge.svg)](https://snyk.io/test/github/gti-sos/SOS2526-16)
 - **Team**
   - Javier Prados Acosta (https://github.com/JavierPradosA)
   - Adrián Rico Hernández (https://github.com/adrianricohdez)
