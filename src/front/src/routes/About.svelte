@@ -76,6 +76,6 @@
 </a>
 
 <h2>Deploy extra</h2>
-<a href = "sos2526-16-production.up.railway.app">
+<a href = "https://sos2526-16-production.up.railway.app/">
   Deploy extra en railway (Javier Prados Acosta)
 </a>
