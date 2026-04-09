@@ -15,13 +15,13 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "coverage": "type coverage\\lcov.info | coveralls",
+    "coverage": "cat coverage/lcov.info | coveralls",
 
     "start": "npm run build-front && node index.js",
     "build-front": "cd src/front && npm install --include=dev && npm run build",
     "dev-front": "cd src/front && npm run dev -- --open",
 
-    "test": "nyc start-server-and-test start http://localhost:3000 test-apis-local",
+    "test": "nyc --reporter=lcov --reporter=text start-server-and-test start http://localhost:3000 test-apis-local",
 
     "test-apis-local": "npm run test-global-ev-charging-infrastructures && npm run test-global-ev-sales && npm run test-global-ev-stock-volumes",
     "test-global-ev-sales": "newman run ./tests/api/api-test-IMM.json -e ./tests/api/api-test-env-local.json",
