@@ -16,12 +16,13 @@
   "main": "index.js",
   "scripts": {
     "coverage": "cat coverage/lcov.info | coveralls",
+    "test-unit": "node --test tests/unit/api.test.js",
     "start": "npm run build-all && node index.js",
     "build-all": "npm run build-svelte && npm run build-vue",
     "build-svelte": "npm --prefix src/front install --include=dev && npm --prefix src/front run build",
     "build-vue": "npm --prefix frontend-vue install --include=dev && npm --prefix frontend-vue run build",
     "dev-front": "cd src/front && npm run dev -- --open",
-    "test": "nyc --reporter=lcov --reporter=text start-server-and-test start http://localhost:3000 test-apis-local",
+    "test": "nyc node --test tests/unit/api.test.js && nyc --reporter=lcov --reporter=text start-server-and-test start http://localhost:3000 test-apis-local",
     "test-apis-local": "npm run test-global-ev-charging-infrastructures && npm run test-global-ev-sales && npm run test-global-ev-stock-volumes",
     "test-global-ev-sales": "newman run ./tests/api/api-test-IMM.json -e ./tests/api/api-test-env-local.json",
     "test-global-ev-charging-infrastructures": "newman run ./tests/api/api-test-JPA.json -e ./tests/api/api-test-env-local.json",
@@ -45,6 +46,7 @@
     "newman": "^6.2.2",
     "nyc": "^18.0.0",
     "start-server-and-test": "^2.1.5",
+    "supertest": "^7.2.2",
     "wait-on": "^9.0.4"
   },
   "nyc": {
