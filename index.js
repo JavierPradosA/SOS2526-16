@@ -52,7 +52,7 @@ app.post("/api/v1/global-ev-stock-volumes/login", (req, res) => {
 // 🔹 APIs
 evChargingInfrastructuresAPI(app);
 app.use("/api/v1/global-ev-sales", salesAPI);
-evStockAPI(app);
+evStockAPI(app, verifyToken);
 
 // 🔹 VUE (ANTES DE SVELTE)
 app.use("/global-ev-charging-infrastructures-vue", express.static(path.join(__dirname, "frontend-vue/dist")));
