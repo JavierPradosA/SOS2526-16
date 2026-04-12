@@ -1,6 +1,7 @@
 ## SOS2526-16
 [![Known Vulnerabilities](https://snyk.io/test/github/gti-sos/SOS2526-16/badge.svg)](https://snyk.io/test/github/gti-sos/SOS2526-16)
-[![Coverage Status](https://coveralls.io/repos/github/gti-sos/SOS2526-16/badge.svg?branch=main)](https://coveralls.io/github/gti-sos/SOS2526-16?branch=main) 
+[![Coverage Status](https://coveralls.io/repos/github/gti-sos/SOS2526-16/badge.svg?branch=main)](https://coveralls.io/github/gti-sos/SOS2526-16?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/gti-sos/SOS2526-16/badge.svg?branch=main)](https://coveralls.io/github/gti-sos/SOS2526-16?branch=main)
 - **Team**
   - Javier Prados Acosta (https://github.com/JavierPradosA)
   - Adrián Rico Hernández (https://github.com/adrianricohdez)
