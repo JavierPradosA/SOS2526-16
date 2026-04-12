@@ -22,7 +22,7 @@
     "build-svelte": "npm --prefix src/front install --include=dev && npm --prefix src/front run build",
     "build-vue": "npm --prefix frontend-vue install --include=dev && npm --prefix frontend-vue run build",
     "dev-front": "cd src/front && npm run dev -- --open",
-   "test": "nyc node --test tests/unit/api.test.js && nyc report",
+    "test": "c8 node --test tests/unit/api.test.js",
     "test-apis-local": "npm run test-global-ev-charging-infrastructures && npm run test-global-ev-sales && npm run test-global-ev-stock-volumes",
     "test-global-ev-sales": "newman run ./tests/api/api-test-IMM.json -e ./tests/api/api-test-env-local.json",
     "test-global-ev-charging-infrastructures": "newman run ./tests/api/api-test-JPA.json -e ./tests/api/api-test-env-local.json",
@@ -42,6 +42,7 @@
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0",
+    "c8": "^11.0.0",
     "coveralls": "^3.1.1",
     "newman": "^6.2.2",
     "nyc": "^18.0.0",
@@ -50,15 +51,25 @@
     "wait-on": "^9.0.4"
   },
   "nyc": {
-  "reporter": ["lcov", "text"],
-  "report-dir": "./coverage",
-  "all": true,
-  "include": ["src/back/**/*.js"],
-  "exclude": [
-    "**/node_modules/**",
-    "**/tests/**",
-    "src/front/**",
-    "frontend-vue/**"
-  ]
-}
+    "reporter": [
+      "lcov",
+      "text"
+    ],
+    "report-dir": "./coverage",
+    "all": true,
+    "include": [
+      "src/back/**/*.js"
+    ],
+    "exclude": [
+      "**/node_modules/**",
+      "**/tests/**",
+      "src/front/**",
+      "frontend-vue/**"
+    ],
+    "extension": [
+      ".js"
+    ],
+    "instrument": true,
+    "sourceMap": false
+  }
 }
