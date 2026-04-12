@@ -23,7 +23,6 @@ app.use(cors());
 //AUTENTICACIÓN
 
 function verifyToken(req, res, next) {
-    // 🟢 NUEVO BYPASS INFALIBLE PARA LOCAL/TESTS
     // Si la petición viene de localhost (donde corren los tests), dejamos pasar.
     if (req.hostname === 'localhost' || req.hostname === '127.0.0.1') {
         return next();
@@ -41,6 +40,25 @@ function verifyToken(req, res, next) {
         res.status(401).json({ mensaje: "Acceso denegado" });
     }
 }
+// RUTA LOGIN
+app.post("/api/v1/global-ev-stock-volumes/login", (req, res) => {
+    const { username, password } = req.body;
+
+    // Usuario y contraseña de prueba para la actividad
+    if (username === "admin" && password === "admin") {
+        // Creamos el token
+        const token = jwt.sign(
+            { user: username }, 
+            process.env.JWT_SECRET || 'clave_secreta_provisional', 
+            { expiresIn: '2h' }
+        );
+        // Devolvemos el token al cliente (Postman)
+        res.json({ token: token });
+    } else {
+        // Si fallan las credenciales
+        res.status(401).json({ mensaje: "Usuario o contraseña incorrectos" });
+    }
+});
 
 
 // 🔹 APIs
