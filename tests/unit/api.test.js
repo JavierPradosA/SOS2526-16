@@ -231,3 +231,31 @@ test("GET docs redirect", async () => {
   const res = await request(app).get(`${API}/docs`);
   assert.strictEqual(res.statusCode, 302);
 });
+
+// 🔥 ac_slow eq
+test("GET ac_slow eq", async () => {
+  const res = await request(app)
+    .get(`${API}?ac_slow=0`);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+// 🔥 ac_slow lt
+test("GET ac_slow lt", async () => {
+  const res = await request(app)
+    .get(`${API}?ac_slow_lt=2000`);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+// 🔥 dc_fast gt
+test("GET dc_fast gt", async () => {
+  const res = await request(app)
+    .get(`${API}?dc_fast_gt=0`);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+// 🔥 total_power_kw eq
+test("GET total_power_kw eq", async () => {
+  const res = await request(app)
+    .get(`${API}?total_power_kw=343`);
+  assert.strictEqual(res.statusCode, 200);
+});
