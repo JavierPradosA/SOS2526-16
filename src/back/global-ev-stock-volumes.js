@@ -7,7 +7,7 @@ let db = new dataStore();
 let BASE_URL_API = "/api/v1";
 let DOCS_URL = "https://documenter.getpostman.com/view/52409063/2sBXigLtC2";
 
-function evStockAPI(app) {
+function evStockAPI(app, verifyToken) {
 
     const initialData = [
         { region_country: "Brazil", year: 2024, ev_stock: 214003, macroregion_stock: 1884600, worldwide_stock: 50000000, oil_world_displacement: 58001 },
@@ -186,7 +186,7 @@ function evStockAPI(app) {
 
 
     //Post
-    app.post(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
+    app.post(BASE_URL_API + "/global-ev-stock-volumes",verifyToken, (req, res) => {
         const newRegister = req.body;
         //Comprobamos si tiene los atributos mínimos
         if (
@@ -221,7 +221,7 @@ function evStockAPI(app) {
     });
 
     //Put 
-    app.put(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
+    app.put(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year",verifyToken, (req, res) => {
         const register = req.body;
         const region_country = req.params.region_country.toLowerCase();
         const year = Number(req.params.year);
@@ -252,7 +252,7 @@ function evStockAPI(app) {
     });
 
     //Delete individual
-    app.delete(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year", (req, res) => {
+    app.delete(BASE_URL_API + "/global-ev-stock-volumes/:region_country/:year",verifyToken, (req, res) => {
         const region_country = req.params.region_country;
         const year = Number(req.params.year);
         //Comprobamos si existe ese registro
@@ -275,7 +275,7 @@ function evStockAPI(app) {
 
 
     //Delete colección
-    app.delete(BASE_URL_API + "/global-ev-stock-volumes", (req, res) => {
+    app.delete(BASE_URL_API + "/global-ev-stock-volumes", verifyToken, (req, res) => {
         db.remove({}, { multi: true }, () => {
             res.sendStatus(200);
         });
