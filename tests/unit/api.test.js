@@ -259,3 +259,96 @@ test("GET total_power_kw eq", async () => {
     .get(`${API}?total_power_kw=343`);
   assert.strictEqual(res.statusCode, 200);
 });
+
+test("GET combinación completa de filtros", async () => {
+  const res = await request(app).get(
+    `${API}?country=germany&year=2021&from=2019&to=2023&charging_point_gt=10&ac_slow_gt=0&dc_fast_gt=0&total_power_kw_gt=0`
+  );
+
+  assert.strictEqual(res.statusCode, 200);
+});
+
+test("GET combinación con lt", async () => {
+  const res = await request(app).get(
+    `${API}?charging_point_lt=100000&ac_slow_lt=5000&dc_fast_lt=5000&total_power_kw_lt=5000000`
+  );
+
+  assert.strictEqual(res.statusCode, 200);
+});
+
+test("GET paginación con filtros", async () => {
+  const res = await request(app).get(
+    `${API}?country=germany&offset=1&limit=2`
+  );
+
+  assert.strictEqual(res.statusCode, 200);
+});
+
+// 🔥 activar ac_slow (eq)
+test("GET ac_slow eq branch", async () => {
+  const res = await request(app)
+    .get(`${API}?ac_slow=0`);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+// 🔥 activar dc_fast (eq)
+test("GET dc_fast eq branch", async () => {
+  const res = await request(app)
+    .get(`${API}?dc_fast=6`);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+// 🔥 activar total_power_kw (eq)
+test("GET total_power_kw eq branch", async () => {
+  const res = await request(app)
+    .get(`${API}?total_power_kw=343`);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+test("GET todos eq juntos", async () => {
+  const res = await request(app)
+    .get(`${API}?ac_slow=0&dc_fast=6&total_power_kw=343`);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+test("loadInitialData inserta datos reales", async () => {
+  await request(app).delete(API); // vaciar
+
+  const res = await request(app).get(`${API}/loadInitialData`);
+  assert.strictEqual(res.statusCode, 201);
+
+  const res2 = await request(app).get(API);
+  assert.ok(res2.body.length > 0); // 🔥 clave
+});
+
+test("GET ac_slow eq real", async () => {
+  const res = await request(app)
+    .get(`${API}?ac_slow=3`);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+test("GET dc_fast eq real", async () => {
+  const res = await request(app)
+    .get(`${API}?dc_fast=6`);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+test("GET total_power_kw eq real", async () => {
+  const res = await request(app)
+    .get(`${API}?total_power_kw=343`);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+// 🔥 offset = 0 (no entra en el if)
+test("GET offset 0", async () => {
+  const res = await request(app)
+    .get(`${API}?offset=0`);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+// 🔥 limit = 0
+test("GET limit 0", async () => {
+  const res = await request(app)
+    .get(`${API}?limit=0`);
+  assert.strictEqual(res.statusCode, 200);
+});
