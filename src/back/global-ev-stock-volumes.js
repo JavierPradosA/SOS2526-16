@@ -8,7 +8,6 @@ let BASE_URL_API = "/api/v1";
 let DOCS_URL = "https://documenter.getpostman.com/view/52409063/2sBXigLtC2";
 
 function evStockAPI(app, verifyToken) {
-    console.log("DEPURACIÓN: ¿Llega la función verifyToken?", typeof verifyToken);
     const initialData = [
         { region_country: "Brazil", year: 2024, ev_stock: 214003, macroregion_stock: 1884600, worldwide_stock: 50000000, oil_world_displacement: 58001 },
         { region_country: "Brazil", year: 2010, ev_stock: 0, macroregion_stock: 400, worldwide_stock: 20426, oil_world_displacement: 25 },
@@ -18,7 +17,7 @@ function evStockAPI(app, verifyToken) {
         { region_country: "China", year: 2014, ev_stock: 85000, macroregion_stock: 208000, worldwide_stock: 710087, oil_world_displacement: 830 },
         { region_country: "Colombia", year: 2015, ev_stock: 124, macroregion_stock: 18620, worldwide_stock: 1250810, oil_world_displacement: 1500 },
         { region_country: "Costa Rica", year: 2016, ev_stock: 12, macroregion_stock: 37990, worldwide_stock: 2003100, oil_world_displacement: 2100 },
-        { region_country: "Denmark", year: 2017, ev_stock: 10683, macroregion_stock: 570000, worldwide_stock: 3106800, oil_world_displacement: 3500 },
+        { region_country: "Germany", year: 2017, ev_stock: 10683, macroregion_stock: 570000, worldwide_stock: 3106800, oil_world_displacement: 3500 },
         { region_country: "Finland", year: 2018, ev_stock: 15400, macroregion_stock: 820000, worldwide_stock: 5111000, oil_world_displacement: 6000 },
         { region_country: "Finland", year: 2019, ev_stock: 29701, macroregion_stock: 1330000, worldwide_stock: 7219000, oil_world_displacement: 8100 }
     ];
