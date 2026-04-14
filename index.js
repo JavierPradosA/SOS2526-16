@@ -20,60 +20,89 @@ let app = express();
 app.use(express.json());
 app.use(cors());
 
-//AUTENTICACIÓN
+/* =========================
+   🔐 AUTENTICACIÓN
+========================= */
 
 function verifyToken(req, res, next) {
-    // Si la petición viene de localhost (donde corren los tests), dejamos pasar.
     if (req.hostname === 'localhost' || req.hostname === '127.0.0.1') {
         return next();
     }
 
     const bearerHeader = req.headers['authorization'];
+
     if (typeof bearerHeader !== 'undefined') {
         const token = bearerHeader.split(' ')[1];
-        jwt.verify(token, process.env.JWT_SECRET || 'clave_secreta_provisional', (err, authData) => {
-            if (err) return res.status(403).json({ mensaje: "Token inválido" });
-            req.user = authData;
-            next();
-        });
+
+        jwt.verify(
+            token,
+            process.env.JWT_SECRET || 'clave_secreta_provisional',
+            (err, authData) => {
+                if (err) {
+                    return res.status(403).json({ mensaje: "Token inválido" });
+                }
+                req.user = authData;
+                next();
+            }
+        );
     } else {
         res.status(401).json({ mensaje: "Acceso denegado" });
     }
 }
-// RUTA LOGIN
+
+/* =========================
+   🔑 LOGIN
+========================= */
+
 app.post("/api/v1/global-ev-stock-volumes/login", (req, res) => {
     const { username, password } = req.body;
 
-    // Usuario y contraseña de prueba para la actividad
     if (username === "admin" && password === "admin") {
-        // Creamos el token
         const token = jwt.sign(
-            { user: username }, 
-            process.env.JWT_SECRET || 'clave_secreta_provisional', 
+            { user: username },
+            process.env.JWT_SECRET || 'clave_secreta_provisional',
             { expiresIn: '2h' }
         );
-        // Devolvemos el token al cliente (Postman)
+
         res.json({ token: token });
     } else {
-        // Si fallan las credenciales
         res.status(401).json({ mensaje: "Usuario o contraseña incorrectos" });
     }
 });
 
+/* =========================
+   🔹 APIs
+========================= */
 
-// 🔹 APIs
 evChargingInfrastructuresAPI(app);
 app.use("/api/v1/global-ev-sales", salesAPI);
 evStockAPI(app, verifyToken);
 
-// 🔹 VUE (ANTES DE SVELTE)
-app.use("/global-ev-charging-infrastructures-vue", express.static(path.join(__dirname, "frontend-vue/dist")));
+/* =========================
+   🔹 VUE (LEGACY)
+========================= */
 
-// 🔹 SVELTE (AL FINAL)
+app.use(
+    "/global-ev-charging-infrastructures-vue",
+    express.static(path.join(__dirname, "frontend-vue/dist"))
+);
+
+/* =========================
+   🔥 SVELTE (IMPORTANTE)
+========================= */
+
+// 🔥 SERVIR ARCHIVOS ESTÁTICOS DEL BUILD
+app.use(express.static(path.join(__dirname, 'src/front/build/client')));
+
+// 🔥 HANDLER DE SVELTE (SSR)
 app.use(handler);
+
+/* =========================
+   🚀 SERVER
+========================= */
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
