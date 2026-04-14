@@ -29,7 +29,7 @@
 
 		const countries_stocks = countries.map((c) => {
 			const item = data_ev_stock_volumes.find((d) => d.region_country.toLowerCase() === c);
-			return item ? item.ev_stock : 0;
+			return item ? item.oil_world_displacement : 0;
 		});
 
 		const countries_sales = countries.map((c) => {
@@ -71,112 +71,28 @@
                     floating: true, backgroundColor: 'rgba(255,255,255,0.25)'
                 },
                 series: [{
-                    name: 'Volumen Stock (Tú)',
+                    name: 'Ventas',
                     type: 'column', // Cumple requisito: No es tipo "line"
                     yAxis: 1,
-                    data: countries_stocks,
+                    data: countries_sales,
                     tooltip: { valueSuffix: ' unidades' }
                 }, {
-                    name: 'Puntos de Carga (Socio B)',
+                    name: 'Puntos de Carga',
                     type: 'spline',
                     yAxis: 2,
                     data: countries_infrastructure,
                     dashStyle: 'shortdot',
                     tooltip: { valueSuffix: ' puntos' }
                 }, {
-                    name: 'Ventas (Socio A)',
+                    name: 'Ahorro petróleo',
                     type: 'spline',
-                    data: countries_sales,
-                    tooltip: { valueSuffix: ' ventas' }
+                    data: countries_stocks,
+                    tooltip: { valueSuffix: ' ahorro petróleo' }
                 }]
             });
         }
     );
 
-	/*
-	chart: {
-        zooming: {
-            type: 'xy'
-        }
-    },
-	*/
-
-	/*
-	onMount(async () => {
-
-		Highcharts.chart('container', {
-			title: {
-				text: 'Evolución Vehículos Eléctricos',
-				align: 'left'
-			},
-
-			subtitle: {
-				text: 'Infraestructura vs Ventas vs Producción (datos de prueba)',
-				align: 'left'
-			},
-
-			yAxis: {
-				title: {
-					text: 'Cantidad'
-				}
-			},
-
-			xAxis: {
-				categories: ['2018', '2019', '2020', '2021', '2022'],
-				accessibility: {
-					rangeDescription: 'Range: 2018 to 2022'
-				}
-			},
-
-			legend: {
-				layout: 'vertical',
-				align: 'right',
-				verticalAlign: 'middle'
-			},
-
-			plotOptions: {
-				series: {
-					label: {
-						connectorAllowed: false
-					}
-				}
-			},
-
-			series: [
-				{
-					name: 'Puntos de carga',
-					data: [5000, 8000, 12000, 15000, 20000]
-				},
-				{
-					name: 'Ventas EV',
-					data: [10000, 18000, 30000, 45000, 60000]
-				},
-				{
-					name: 'Producción EV',
-					data: [12000, 20000, 35000, 50000, 70000]
-				}
-			],
-
-			responsive: {
-				rules: [
-					{
-						condition: {
-							maxWidth: 500
-						},
-						chartOptions: {
-							legend: {
-								layout: 'horizontal',
-								align: 'center',
-								verticalAlign: 'bottom'
-							}
-						}
-					}
-				]
-			}
-		});
-	});
-
-	*/
 </script>
 
 <div id="container" style="width: 100%; height: 400px; margin: 0 auto"></div>
