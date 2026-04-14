@@ -8,6 +8,12 @@
 
 	onMount(async () => {
 		//Cargar datos en paraleloç
+		  await Promise.all([
+            fetch('/api/v1/global-ev-stock-volumes/loadInitialData'),
+            fetch('/api/v1/global-ev-sales/loadInitialData'),
+            fetch('/api/v1/global-ev-charging-infrastructures/loadInitialData')
+        ]);
+
 		const [carga_ev_charging_infrastructures, carga_ev_sales, carga_ev_stock_volumes] =
 			await Promise.all([
 				fetch('/api/v1/global-ev-charging-infrastructures'),
@@ -19,15 +25,15 @@
 		data_ev_sales = await carga_ev_sales.json();
 		data_ev_stock_volumes = await carga_ev_stock_volumes.json();
 
-		const countries = ['Finland', 'Germany', 'Canada'];
+		const countries = ['finland', 'germany', 'canada'];
 
 		const countries_stocks = countries.map((c) => {
-			const item = data_ev_stock_volumes.find((d) => d.region_country === c);
+			const item = data_ev_stock_volumes.find((d) => d.region_country.toLowerCase() === c);
 			return item ? item.ev_stock : 0;
 		});
 
 		const countries_sales = countries.map((c) => {
-			const item = data_ev_sales.find((d) => d.country === c);
+			const item = data_ev_sales.find((d) => d.region.toLowerCase() === c);
 			return item ? item.value : 0; // Ajusta 'sales' al nombre real de su campo
 		});
 
