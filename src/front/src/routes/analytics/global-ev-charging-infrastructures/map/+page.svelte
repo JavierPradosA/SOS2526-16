@@ -4,49 +4,72 @@
 	let data = [];
 	let years = $state([]);
 	let selectedYear = $state(null);
+
 	let Highcharts;
-	let chart = null;
+	let chart;
 
 	const countryMap = {
-		germany: 'DEU',
-		canada: 'CAN',
-		finland: 'FIN',
-		malta: 'MLT',
-		switzerland: 'CHE',
-		turkiye: 'TUR',
-		monaco: 'MCO'
+		germany: 'Germany',
+		canada: 'Canada',
+		finland: 'Finland',
+		malta: 'Malta',
+		switzerland: 'Switzerland',
+		turkiye: 'Turkey',
+		monaco: 'Monaco'
 	};
 
 	async function loadScript(src) {
-		return new Promise((resolve, reject) => {
-			if (document.querySelector(`script[src="${src}"]`)) {
-				resolve();
-				return;
-			}
-			const script = document.createElement('script');
-			script.src = src;
-			script.onload = resolve;
-			script.onerror = reject;
-			document.head.appendChild(script);
+		return new Promise((resolve) => {
+			if (document.querySelector(`script[src="${src}"]`)) return resolve();
+			const s = document.createElement('script');
+			s.src = src;
+			s.onload = resolve;
+			document.head.appendChild(s);
 		});
 	}
+
+	const getGraticule = () => {
+		const data = [];
+
+		for (let x = -180; x <= 180; x += 15) {
+			data.push({
+				geometry: {
+					type: 'LineString',
+					coordinates: [[x, -80], [x, 80]]
+				}
+			});
+		}
+
+		for (let y = -80; y <= 80; y += 10) {
+			const coords = [];
+			for (let x = -180; x <= 180; x += 5) {
+				coords.push([x, y]);
+			}
+			data.push({
+				geometry: {
+					type: 'LineString',
+					coordinates: coords
+				}
+			});
+		}
+
+		return data;
+	};
 
 	async function renderChart() {
 		if (!Highcharts || !selectedYear) return;
 
 		const topology = await fetch(
 			'https://code.highcharts.com/mapdata/custom/world.topo.json'
-		).then(res => res.json());
+		).then(r => r.json());
 
 		const filtered = data.filter(d => Number(d.year) === Number(selectedYear));
 
-		const mapData = filtered
-			.filter(d => countryMap[d.country])
-			.map(d => ({
-				code: countryMap[d.country],
-				value: Number(d.charging_point) || 0,
-				custom: d
-			}));
+		const mapData = filtered.map(d => ({
+			name: countryMap[d.country],
+			value: Number(d.charging_point) || 0,
+			custom: d
+		}));
 
 		if (chart) chart.destroy();
 
@@ -56,7 +79,14 @@
 			},
 
 			title: {
-				text: `EV Charging Infrastructure (${selectedYear})`
+				text: `EV Charging (${selectedYear})`
+			},
+
+			mapView: {
+				projection: {
+					name: 'Orthographic',
+					rotation: [60, -30]
+				}
 			},
 
 			mapNavigation: {
@@ -64,15 +94,15 @@
 			},
 
 			colorAxis: {
-				min: 0
+				min: 0,
+				minColor: '#BFCFAD',
+				maxColor: '#31784B'
 			},
 
 			tooltip: {
 				useHTML: true,
 				pointFormatter: function () {
-					if (!this.custom) {
-						return `<b>${this.name}</b><br/>Sin datos`;
-					}
+					if (!this.custom) return `<b>${this.name}</b><br/>Sin datos`;
 
 					return `
 						<b>${this.name}</b><br/>
@@ -85,12 +115,24 @@
 				}
 			},
 
-			series: [{
-				name: 'Charging Points',
-				joinBy: ['iso-a3', 'code'],
-				data: mapData,
-				nullColor: '#e6e6e6'
-			}]
+			series: [
+				{
+					type: 'mapline',
+					data: getGraticule(),
+					enableMouseTracking: false,
+					color: 'rgba(0,0,0,0.1)'
+				},
+				{
+					name: 'Charging Points',
+					data: mapData,
+					joinBy: 'name',
+					states: {
+						hover: {
+							color: '#a4edba'
+						}
+					}
+				}
+			]
 		});
 	}
 
@@ -99,59 +141,35 @@
 	}
 
 	onMount(async () => {
-		try {
-			// 🔥 cargar scripts Highcharts MAP
-			await Promise.all([
-				loadScript('https://code.highcharts.com/maps/highmaps.js'),
-				loadScript('https://code.highcharts.com/modules/accessibility.js')
-			]);
+		await Promise.all([
+			loadScript('https://code.highcharts.com/maps/highmaps.js'),
+			loadScript('https://code.highcharts.com/highcharts-more.js'),
+			loadScript('https://code.highcharts.com/modules/accessibility.js')
+		]);
 
-			Highcharts = window.Highcharts;
+		Highcharts = window.Highcharts;
 
-			// 🔥 cargar datos backend
-			await fetch('/api/v1/global-ev-charging-infrastructures/loadInitialData');
+		await fetch('/api/v1/global-ev-charging-infrastructures/loadInitialData');
 
-			const res = await fetch('/api/v1/global-ev-charging-infrastructures');
+		const res = await fetch('/api/v1/global-ev-charging-infrastructures');
+		data = await res.json();
 
-			if (!res.ok) {
-				console.error("Error API:", res.status);
-				return;
-			}
+		years = [...new Set(data.map(d => Number(d.year)))].sort((a, b) => a - b);
 
-			data = await res.json();
-
-			console.log("DATA:", data);
-
-			// 🔥 generar años correctamente
-			years = [...new Set(data.map(d => Number(d.year)))]
-				.filter(y => !isNaN(y))
-				.sort((a, b) => a - b);
-
-			console.log("YEARS:", years);
-
-			if (years.length > 0) {
-				selectedYear = years[0];
-				await renderChart();
-			}
-
-		} catch (err) {
-			console.error("Error general:", err);
+		if (years.length > 0) {
+			selectedYear = years[0];
+			renderChart();
 		}
 	});
 </script>
 
-<h2>EV World Map</h2>
+<h2>🌍 EV Globe Visualization</h2>
 
 <label>Año:</label>
-
 <select bind:value={selectedYear} on:change={handleYearChange}>
-	{#if years.length === 0}
-		<option disabled>No hay datos</option>
-	{:else}
-		{#each years as y}
-			<option value={y}>{y}</option>
-		{/each}
-	{/if}
+	{#each years as y}
+		<option value={y}>{y}</option>
+	{/each}
 </select>
 
-<div id="container" style="height: 600px; margin-top: 20px;"></div>
+<div id="container" style="height: 650px; margin-top: 20px;"></div>
